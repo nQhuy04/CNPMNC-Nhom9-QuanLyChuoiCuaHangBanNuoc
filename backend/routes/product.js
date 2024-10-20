@@ -1,60 +1,118 @@
-// routes/product.js
-
 const express = require('express');
-const Product = require('../models/Product');
+const multer = require('multer');
+const path = require('path');
 const router = express.Router();
+const Product = require('../models/Product');
 
-// Lấy tất cả sản phẩm
+// Cấu hình multer để lưu trữ hình ảnh
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+const upload = multer({ storage });
+
+// Lấy danh sách sản phẩm
 router.get('/', async (req, res) => {
     try {
         const products = await Product.find();
         res.json(products);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Error fetching products:', error);
+        res.status(500).json({ message: 'Error fetching products' });
     }
 });
 
+router.get('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const product = await Product.findById(id);
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        res.status(200).json(product);
+    } catch (error) {
+        console.error('Error fetching product:', error);
+        res.status(500).json({ message: 'Error fetching product' });
+    }
+});
+
+
 // Thêm sản phẩm mới
-router.post('/', async (req, res) => {
-    const { name, description, price, ingredients, image_url } = req.body;
+router.post('/', upload.single('image'), async (req, res) => {
+    const { name, description, price, ingredients } = req.body;
+
+    if (!name || !description || !price || !req.file) {
+        return res.status(400).json({ message: 'Tất cả các trường đều là bắt buộc.' });
+    }
+
     const newProduct = new Product({
         name,
         description,
         price,
-        ingredients, // Sử dụng ingredients
-        image_url,
+        image_url: req.file.path,
+        ingredients: JSON.parse(ingredients)
     });
 
     try {
-        const savedProduct = await newProduct.save();
-        res.status(201).json(savedProduct);
+        await newProduct.save();
+        res.status(201).json(newProduct);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        console.error('Error saving product:', error);
+        res.status(500).json({ message: 'Error saving product' });
     }
 });
 
-// Cập nhật sản phẩm
-router.put('/:id', async (req, res) => {
+// Cập nhật sản phẩm theo ID
+router.put('/:id', upload.single('image'), async (req, res) => {
     const { id } = req.params;
-    const updates = req.body;
+    const { name, description, price, ingredients } = req.body;
 
     try {
-        const updatedProduct = await Product.findByIdAndUpdate(id, updates, { new: true });
-        res.json(updatedProduct);
+        const updateData = {
+            name,
+            description,
+            price,
+            ingredients: ingredients ? JSON.parse(ingredients) : undefined,
+        };
+
+        if (req.file) {
+            updateData.image_url = req.file.path;
+        }
+
+        const updatedProduct = await Product.findByIdAndUpdate(id, updateData, {
+            new: true,
+            runValidators: true,
+        });
+
+        if (!updatedProduct) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        res.status(200).json({ message: 'Product updated successfully', updatedProduct });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        console.error('Error updating product:', error);
+        res.status(500).json({ message: 'Error updating product' });
     }
 });
 
-// Xóa sản phẩm
+// Xóa sản phẩm theo ID
 router.delete('/:id', async (req, res) => {
     const { id } = req.params;
-
     try {
-        await Product.findByIdAndDelete(id);
-        res.status(204).end();
+        const deletedProduct = await Product.findByIdAndDelete(id);
+        if (!deletedProduct) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+        res.status(200).json({ message: 'Product deleted successfully', deletedProduct });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Error deleting product:', error);
+        res.status(500).json({ message: 'Error deleting product', error: error.message });
     }
 });
 

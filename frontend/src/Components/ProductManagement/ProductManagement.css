@@ -1,52 +1,143 @@
-/* src/components/ProductManagement.css */
-
 .product-management {
     padding: 20px;
-    max-width: 800px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
-h1 {
-    text-align: center;
+.product-management__title {
+    font-size: 24px;
+    margin-bottom: 20px;
     color: #333;
 }
 
-h2 {
-    margin-top: 30px;
-    color: #555;
-}
-
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-li {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    padding: 15px;
-    transition: box-shadow 0.3s;
-}
-
-li:hover {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-h3 {
-    margin: 0;
-    color: #333;
-}
-
-p {
-    margin: 5px 0;
+.product-management__subtitle {
+    font-size: 18px;
+    margin-bottom: 10px;
     color: #666;
 }
 
-img {
-    max-width: 100%;
+.product-management__add-button {
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    align-self: flex-start;
+}
+
+.product-management__add-button:hover {
+    background-color: #45a049;
+}
+
+.product-management__table-container {
+    overflow-x: auto;
+    flex: 1;
+}
+
+.product-management__table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.product-management__table-header {
+    background-color:  rgb(76, 161, 175);
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+.product-management__table-row {
+    border-bottom: 1px solid #ddd;
+}
+
+.product-management__table-cell {
+    padding: 12px;
+    color: #333;
+    vertical-align: middle;
+}
+
+.product-management__item-image {
+    width: 100px;
     height: auto;
     border-radius: 5px;
-    margin-top: 10px;
 }
+
+.product-management__edit-button,
+.product-management__delete-button,
+.product-management__view-button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.product-management__edit-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.product-management__delete-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.product-management__view-button {
+    background-color: #ffc107;
+    color: white;
+}
+
+.product-management__edit-button:hover,
+.product-management__delete-button:hover,
+.product-management__view-button:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+.product-management__pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.product-management__pagination-button {
+    margin: 0 5px;
+    padding: 12px 20px; /* Điều chỉnh kích thước nút */
+    border: none;
+    border-radius: 8px; /* Bo tròn góc lớn hơn */
+    background-color: #ff5722; /* Màu nền cam */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s; /* Thêm hiệu ứng bóng */
+    font-weight: bold; /* Làm chữ đậm hơn */
+}
+
+.product-management__pagination-button:hover {
+    background-color: #e64a19; /* Màu nền tối hơn khi hover */
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Thêm bóng khi hover */
+}
+
+.product-management__pagination-button:disabled {
+    background-color: #d6d6d6;
+    cursor: not-allowed;
+}
+
+/* Thêm lớp cho nút đang được chọn */
+.product-management__pagination-button--active {
+    background-color: #007bff; /* Màu nền xanh dương cho nút đang chọn */
+    border: 2px solid #ffffff; /* Thêm viền trắng */
+    transform: scale(1.1); /* Tăng kích thước nút đang chọn */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Thêm bóng khi chọn */
+}
+

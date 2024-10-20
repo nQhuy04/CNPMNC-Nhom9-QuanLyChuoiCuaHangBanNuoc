@@ -7,6 +7,8 @@ import Register from "./Components/Register/Register";
 import NavBar from "./Components/NavBar/NavBar";
 import Dashboard from "./Components/Dashboard/Dashboard";
 import ProductManagement from "./Components/ProductManagement/ProductManagement";
+import AddProduct from "./Components/ProductManagement/AddProduct";
+import EditProduct from "./Components/ProductManagement/EditProduct";
 
 
 function App() {
@@ -22,6 +24,9 @@ function App() {
           <Route path="/productmanagement" element={<ProductManagement />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/add-product" element={<AddProduct />} /> 
+          <Route path="/edit-product/:id" element={<EditProduct />} />
+
         </Routes>
       </div>
       </div>   

@@ -1,50 +1,40 @@
+// server.js
+
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-require('dotenv').config();
+const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
+const authRoute = require('./routes/auth');
+const userRoute = require('./routes/user');
+const productRoute = require('./routes/product'); // Thêm import cho router sản phẩm
 
-// Kết nối đến MongoDB
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("Kết nối đến MongoDB thành công!"))
-    .catch(err => console.error("Kết nối đến MongoDB thất bại:", err));
-
-// Tạo ứng dụng Express
+dotenv.config();
 const app = express();
+const uri = process.env.MONGO_URI;
+const Port = process.env.Port;
+
+async function connectToDB() {
+    try {
+        await mongoose.connect(uri);
+        console.log('Connected to MongoDB');
+    } catch (err) {
+        console.error('MongoDB connection error:', err);
+    }
+}
+
+connectToDB();
+
 app.use(cors());
-app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(express.json());
+app.use('/uploads', express.static('uploads'));
 
-// Mô hình sản phẩm
-const productSchema = new mongoose.Schema({
-    name: String,
-    description: String,
-    price: Number,
-    image_url: String,
-    ingredients: [{ ingredient: String, quantity: String }]
-});
 
-const Product = mongoose.model('Product', productSchema);
+app.use("/v1/auth", authRoute);
+app.use("/v1/user", userRoute);
+app.use("/api/products", productRoute); // Sử dụng router cho sản phẩm
 
-// Route để lấy danh sách sản phẩm
-app.get('/api/products', async (req, res) => {
-    const products = await Product.find();
-    res.json(products);
-});
-
-// Route để thêm sản phẩm
-app.post('/api/products', async (req, res) => {
-    const newProduct = new Product(req.body);
-    await newProduct.save();
-    res.status(201).json(newProduct);
-});
-
-// Route cho đường dẫn gốc
-app.get('/', (req, res) => {
-    res.send('Chào mừng bạn đến với API của tôi!');
-});
-
-// Bắt đầu server
-const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(Port, () => {
+    console.log(`Server is running on http://localhost:${Port}`);
 });
