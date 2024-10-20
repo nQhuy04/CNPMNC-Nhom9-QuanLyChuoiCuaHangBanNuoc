@@ -1,0 +1,59 @@
+/* Dashboard.css */
+
+.dashboard {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    width: 100%;
+}
+
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+    font-size: 2.5rem;
+    color: #333;
+}
+
+.dashboard-header p {
+    font-size: 1.2rem;
+    color: #777;
+}
+
+.dashboard-content {
+    display: flex; /* Sử dụng flexbox */
+    flex-wrap: wrap; /* Cho phép các phần tử cuộn xuống khi hết không gian */
+    gap: 1.5rem; /* Khoảng cách giữa các phần tử */
+    justify-content: center; /* Căn giữa các phần tử */
+}
+
+.card {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s;
+    flex: 0 0 calc(25% - 1.5rem); /* Đặt độ rộng của mỗi thẻ (4 thẻ trên mỗi hàng) */
+    max-width: 200px; /* Giới hạn chiều rộng tối đa */
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h2 {
+    font-size: 1.5rem;
+    color: #555;
+}
+
+.card p {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2196F3; /* Màu xanh cho số liệu */
+}

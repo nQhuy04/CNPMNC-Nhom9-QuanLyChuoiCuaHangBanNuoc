@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between; 
   align-items: center; 
-  background-color: #ff6347; 
+  background: linear-gradient(135deg, rgb(241, 133, 62), rgb(241, 239, 145)); /* Màu nền tối hơn */
   padding: 1rem 2rem; 
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }

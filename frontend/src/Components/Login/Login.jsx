@@ -35,7 +35,7 @@ const Login = () => {
           placeholder="Nhập mật khẩu"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Tiếp Tục</button>
+        <button type="submit">Đăng nhập</button>
       </form>
       <div className="login-register">
         Chưa có tài khoản?{" "}

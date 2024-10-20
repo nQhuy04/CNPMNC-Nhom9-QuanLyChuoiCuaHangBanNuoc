@@ -21,4 +21,9 @@ body,
   font-size: 1.15rem;
   font-family: "Inter", sans-serif;
   background-color: #ffffff;
+  width: 100%;
+}
+
+.container_App{
+  display: flex;
 }
