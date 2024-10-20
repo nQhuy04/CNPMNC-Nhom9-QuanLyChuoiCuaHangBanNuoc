@@ -8,7 +8,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 5rem auto; /* Giữ cùng khoảng cách như trang login */
+  margin: 2rem auto; /* Giữ cùng khoảng cách như trang login */
   padding: 2rem;
   border-radius: 12px;
   width: 400px; /* Chiều rộng của container */
@@ -91,5 +91,15 @@ button:hover {
   font-size: 0.9rem; /* Kích thước chữ label */
   margin-bottom: 0.5rem; /* Khoảng cách dưới label */
   color: #555; /* Màu chữ cho label */
+}
+.register-login {
+  margin-top: 1rem; /* Khoảng cách phía trên cho đoạn chữ đăng ký */
+  font-size: 0.9rem; /* Kích thước chữ cho đoạn chữ đăng ký */
+  color: #555; /* Màu chữ cho đoạn chữ đăng ký */
+}
+.register-login-link {
+  text-decoration: none;
+  color: #ff6347; /* Màu cho liên kết đăng ký */
+  font-weight: 700;
 }
 

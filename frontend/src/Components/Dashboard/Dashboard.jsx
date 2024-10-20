@@ -1,8 +1,19 @@
 // Dashboard.jsx
+import { useEffect } from "react";
 import React from 'react';
 import './dashboard.css';
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const user = useSelector((state) => state.auth.login?.currentUser);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    } 
+  });
+
   return (
     <div className="dashboard">
       <header className="dashboard-header">

@@ -1,79 +1,90 @@
+/* userManagement.css */
+
 .home-container {
+    padding: 20px;
+    background-color: #f8f9fa; /* Màu nền sáng cho toàn bộ container */
+    border-radius: 8px; /* Góc bo tròn cho container */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ cho container */
+  }
+  
+  .home-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333; /* Màu chữ tối */
+  }
+  
+  .home-role {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #555; /* Màu chữ trung bình */
+  }
+  
+  .home-userlist {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #f9f9f9;
-    height: 100vh; /* Chiếm toàn bộ chiều cao của viewport */
-    padding: 2rem; /* Padding cho container */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ cho container */
-    border-radius: 8px; /* Bo tròn góc cho container */
-    margin: 2rem auto; /* Tạo khoảng cách phía trên và dưới */
-    width: 80%; /* Chiều rộng của container */
-}
-
-.home-title {
-    font-size: 2rem; /* Kích thước chữ cho tiêu đề */
-    font-weight: 700; /* Đậm chữ */
-    color: #333; /* Màu chữ tiêu đề */
-    margin-bottom: 1rem; /* Khoảng cách dưới tiêu đề */
-}
-
-.home-role {
-    font-size: 1.25rem; /* Kích thước chữ cho vai trò */
-    color: #555; /* Màu chữ cho vai trò */
-    margin-bottom: 1.5rem; /* Khoảng cách dưới vai trò */
-}
-
-.home-userlist {
+    gap: 10px; /* Khoảng cách giữa các user */
+  }
+  
+  .user-container {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+    justify-content: space-between; /* Giãn cách giữa tên người dùng và nút xóa */
     align-items: center;
-}
-
-.user-container {
+    padding: 10px;
+    background-color: #fff; /* Nền trắng cho từng user */
+    border-radius: 4px; /* Góc bo tròn cho từng user */
+    border: 1px solid #e0e0e0; /* Đường viền nhẹ */
+    transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu nền */
+  }
+  
+  .user-container:hover {
+    background-color: #f1f1f1; /* Đổi màu nền khi hover */
+  }
+  
+  .home-user {
+    font-size: 18px;
+    color: #333; /* Màu chữ tối cho tên người dùng */
+  }
+  
+  .delete-user {
+    font-size: 16px;
+    color: #d9534f; /* Màu đỏ cho nút xóa */
+    cursor: pointer; /* Con trỏ tay khi hover */
+    transition: color 0.3s ease; /* Hiệu ứng chuyển màu chữ */
+  }
+  
+  .delete-user:hover {
+    color: #c9302c; /* Đổi màu khi hover */
+  }
+  
+  /* Xác nhận xóa */
+  .confirm-delete {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    margin: 1rem; /* Khoảng cách giữa các user */
-    width: 250px; /* Chiều rộng cho mỗi user */
-    background-color: #e9e9e9; /* Màu nền cho user */
-    padding: 1rem; /* Padding cho user */
-    border-radius: 8px; /* Bo tròn góc cho user */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Bóng đổ cho user */
-    transition: transform 0.3s; /* Hiệu ứng chuyển tiếp */
-}
-
-.user-container:hover {
-    transform: scale(1.05); /* Hiệu ứng phóng to khi hover */
-}
-
-.home-user {
-    font-size: 1.2rem; /* Kích thước chữ cho tên người dùng */
-    color: #333; /* Màu chữ cho tên người dùng */
-    margin-bottom: 0.5rem; /* Khoảng cách dưới tên người dùng */
-}
-
-.delete-user {
+    gap: 10px; /* Khoảng cách giữa các phần tử */
+  }
+  
+  .confirm-delete span {
+    font-size: 16px;
+    color: #333; /* Màu chữ tối cho thông báo xác nhận */
+  }
+  
+  .confirm-delete button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 1rem;
-    background-color: rgb(240, 34, 96);
-    padding: 0.5rem 1rem; /* Padding cho nút xóa */
-    border-radius: 4px; /* Bo tròn góc cho nút xóa */
-    color: white; /* Màu chữ cho nút xóa */
-    transition: background-color 0.3s, transform 0.3s; /* Hiệu ứng chuyển tiếp */
-}
-
-.delete-user:hover {
-    background-color: rgb(207, 18, 75); /* Màu nền khi hover */
-    transform: scale(1.05); /* Hiệu ứng phóng to khi hover */
-}
-
-.errorMsg {
-    margin-top: 1.5rem; /* Khoảng cách trên cho thông báo lỗi */
-    font-size: 1.5rem; /* Kích thước chữ cho thông báo lỗi */
-    color: red; /* Màu chữ cho thông báo lỗi */
-    text-align: center; /* Căn giữa chữ thông báo lỗi */
-}
+    transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu nền */
+  }
+  
+  .confirm-delete button:hover {
+    background-color: #d9534f; /* Màu nền đỏ khi hover */
+    color: white; /* Màu chữ trắng khi hover */
+  }
+  
+  .errorMsg {
+    margin-top: 20px;
+    color: #d9534f; /* Màu đỏ cho thông báo lỗi */
+    font-size: 16px;
+  }
+  

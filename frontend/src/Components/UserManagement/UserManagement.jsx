@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./userManagement.css";
 import { deleteUser, getAllUsers } from "../../redux/apiRequest";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,13 +9,19 @@ import { createAxios } from "../../createInstance";
 const UserManagement = () => {
   const user = useSelector((state) => state.auth.login?.currentUser);
   const userList = useSelector((state) => state.users.users?.allUsers);
-  const msg = useSelector((state) => state.users?.msg);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [confirmDelete, setConfirmDelete] = useState(null); // Xác nhận xóa
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const handleDelete = (id) => {
-    deleteUser(user?.accessToken, dispatch, id, axiosJWT);
+    // Xác nhận trước khi xóa
+    if (confirmDelete === id) {
+      deleteUser(user?.accessToken, dispatch, id, axiosJWT);
+      setConfirmDelete(null); // Reset xác nhận sau khi xóa
+    } else {
+      setConfirmDelete(id); // Đặt ID cần xác nhận
+    }
   };
 
   useEffect(() => {
@@ -37,12 +43,19 @@ const UserManagement = () => {
           <div className="user-container" key={user._id}>
             <div className="home-user">{user.username}</div>
             <div className="delete-user" onClick={() => handleDelete(user._id)}>
-              Xóa
+              {confirmDelete === user._id ? (
+                <>
+                  <span>Xác nhận xóa?</span>
+                  <button onClick={() => handleDelete(user._id)}>Có</button>
+                  <button onClick={() => setConfirmDelete(null)}>Không</button>
+                </>
+              ) : (
+                "Xóa"
+              )}
             </div>
           </div>
         ))}
       </div>
-      {msg && <div className="errorMsg">{msg}</div>}
     </main>
   );
 };

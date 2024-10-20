@@ -1,7 +1,7 @@
 /* Sidebar.css */
 
 .sidebar {
-  width: 335px;
+  width: 350px;
   background: linear-gradient(135deg, rgb(44, 62, 80), rgb(76, 161, 175)); /* Màu nền tối hơn */
   color: white;
   height: 100vh; /* Chiều cao 100% màn hình */

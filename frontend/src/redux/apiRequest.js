@@ -33,15 +33,15 @@ export const getAllUsers = async(accessToken, dispatch, axiosJWT)=>{
         dispatch(getUsersFailed());
     }
 };
-export const deleteUser = async(accessToken,dispatch, id, axiosJWT)=>{
+export const deleteUser = async (accessToken, dispatch, id, axiosJWT) => {
     dispatch(deleteUserStart());
     try {
-        const res = await axiosJWT.delete("/v1/user/" + id,{
-            headers: {token: `Bearer ${accessToken}`},
+        const res = await axiosJWT.delete("/v1/user/" + id, {
+            headers: { token: `Bearer ${accessToken}` },
         });
-        dispatch(deleteUserSuccess(res.data));
+        dispatch(deleteUserSuccess(res.data)); // Res data trả về từ server là msg
     } catch (err) {
-        dispatch(deleteUserFailed(err.response.data));
+        dispatch(deleteUserFailed(err.response?.data || "Đã xảy ra lỗi khi xóa người dùng"));
     }
 };
 export const logOut = async(dispatch, id, navigate, accessToken, axiosJWT)=>{
