@@ -7,6 +7,8 @@ import Register from "./Components/Register/Register";
 import NavBar from "./Components/NavBar/NavBar";
 import Dashboard from "./Components/Dashboard/Dashboard";
 import ProductManagement from "./Components/ProductManagement/ProductManagement";
+<Route path="/usermanagement" element={<UserManagement />} />
+
 
 
 function App() {

@@ -15,8 +15,11 @@ const UserManagement = () => {
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const handleDelete = (id) => {
-    deleteUser(user?.accessToken, dispatch, id, axiosJWT);
+    if (window.confirm("Bạn có chắc chắn muốn xóa người dùng này?")) {
+      deleteUser(user?.accessToken, dispatch, id, axiosJWT);
+    }
   };
+  
 
   useEffect(() => {
     if (!user) {
