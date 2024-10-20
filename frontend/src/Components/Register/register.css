@@ -1,22 +1,95 @@
+body {
+  background-color: #f0f8ff; /* Màu nền nhẹ cho toàn bộ trang */
+  font-family: "Inter", sans-serif; /* Font chữ toàn bộ */
+}
+
 .register-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 3rem;
+  margin: 5rem auto; /* Giữ cùng khoảng cách như trang login */
+  padding: 2rem;
   border-radius: 12px;
-  height: 400px;
-  min-width: 20%;
-  background-color: rgb(218, 218, 218);
-  text-align:center;
+  width: 400px; /* Chiều rộng của container */
+  background-color: #ffffff; /* Màu nền trắng */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ cho container */
 }
 
 .register-title {
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: 2rem; /* Kích thước tiêu đề */
+  color: #ff6347; /* Màu đỏ gạch cho tiêu đề */
+  margin-bottom: 1rem; /* Khoảng cách dưới tiêu đề */
 }
-.register-error{
-  margin-top:1rem;
-  align-self:center;
-  color:rgb(255, 0, 55);
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
+
+
+
+input {
+  border: 1px solid #ccc; /* Đường viền cho input */
+  padding: 0.75rem; /* Padding cho input */
+  margin-bottom: 1rem; /* Khoảng cách giữa các input */
+  border-radius: 6px; /* Radius cho input */
+  transition: border 0.3s; /* Hiệu ứng chuyển tiếp khi focus */
+}
+
+input:focus {
+  border: 1px solid #ff6347; /* Đổi màu đường viền khi focus */
+  outline: none; /* Xóa outline */
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 6px; /* Radius cho button */
+  color: white;
+  background-color: #ff6347; /* Màu nền cho button */
+  font-size: 1rem;
+  transition: background-color 0.3s; /* Hiệu ứng chuyển tiếp cho button */
+}
+
+button:hover {
+  background-color: #d9534f; /* Tối màu khi hover */
+}
+
+.register-register {
+  margin-top: 1rem; /* Khoảng cách phía trên cho đoạn chữ đăng ký */
+  font-size: 0.9rem; /* Kích thước chữ cho đoạn chữ đăng ký */
+  color: #555; /* Màu chữ cho đoạn chữ đăng ký */
+}
+
+.register-register-link {
+  text-decoration: none;
+  color: #ff6347; /* Màu cho liên kết đăng ký */
+  font-weight: 700;
+}
+
+.email_label{
+  position: relative;
+  right: 145px;
+  font-size: 0.9rem; /* Kích thước chữ label */
+  margin-bottom: 0.5rem; /* Khoảng cách dưới label */
+  color: #555; /* Màu chữ cho label */
+}
+.username_label{
+  position: relative;
+  right: 115px;
+  font-size: 0.9rem; /* Kích thước chữ label */
+  margin-bottom: 0.5rem; /* Khoảng cách dưới label */
+  color: #555; /* Màu chữ cho label */
+}
+.password_label {
+  position: relative;
+  right: 135px;
+  font-size: 0.9rem; /* Kích thước chữ label */
+  margin-bottom: 0.5rem; /* Khoảng cách dưới label */
+  color: #555; /* Màu chữ cho label */
+}
+
