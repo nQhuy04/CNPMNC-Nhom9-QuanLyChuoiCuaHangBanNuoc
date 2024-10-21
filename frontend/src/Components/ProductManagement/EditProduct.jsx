@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import SidebarNav from '../SidebarNav/SidebarNav';
 import './EditProduct.css';
 
 const EditProduct = () => {
@@ -76,6 +77,8 @@ const EditProduct = () => {
     };
 
     return (
+        <div className="container_div">
+            <SidebarNav/>
         <div className="product-container">
             <h1 className="title">Edit Product</h1>
             <form onSubmit={handleSubmit} className="edit-form">
@@ -145,6 +148,7 @@ const EditProduct = () => {
 
                 <button className='btn_EditSubmit' type="submit">Cập nhật sản phẩm</button>
             </form>
+        </div>
         </div>
     );
 };

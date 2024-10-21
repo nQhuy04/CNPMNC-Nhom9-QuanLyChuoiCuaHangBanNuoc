@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { loginSuccess } from "../../redux/authSlice";
 import { createAxios } from "../../createInstance";
 import { FaUserCircle, FaTrash } from 'react-icons/fa';
+import SidebarNav from "../SidebarNav/SidebarNav";
 
 const UserManagement = () => {
   const user = useSelector((state) => state.auth.login?.currentUser);
@@ -43,6 +44,8 @@ const UserManagement = () => {
   }, [user, dispatch, navigate, axiosJWT]);
 
   return (
+    <div className="container_div">
+      <SidebarNav/>
     <main className="user-management-container">
       <h1 className="user-management-title">Quản Lý Người Dùng</h1>
       <div className="user-management-role">
@@ -64,6 +67,7 @@ const UserManagement = () => {
         ))}
       </div>
     </main>
+    </div>
   );
 };
 

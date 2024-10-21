@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import SidebarNav from '../SidebarNav/SidebarNav';
 import axios from 'axios';
 import './DetailProduct.css';
 
@@ -37,6 +38,8 @@ const DetailProduct = () => {
     if (!product) return <p>Đang tải thông tin sản phẩm...</p>;
 
     return (
+        <div className="container_div">
+            <SidebarNav/>
         <div className="product-detail-container">
             <h1 className="product-title">Chi Tiết Sản Phẩm</h1>
             <div className="product-image-container">
@@ -76,6 +79,7 @@ const DetailProduct = () => {
                     </button>
                 </div>
             </div>
+        </div>
         </div>
     );
 };

@@ -12,16 +12,10 @@ import EditProduct from "./Components/ProductManagement/EditProduct";
 import DetailProduct from "./Components/ProductManagement/DetailProduct";
 
 
-
-
-
-
 function App() {
   return (
     <Router>  
       <NavBar />
-      <div className="container_App">
-      <SidebarNav/>
       <div className="App"> 
         <Routes>
           <Route path="/" element={<Dashboard />} />
@@ -33,8 +27,7 @@ function App() {
           <Route path="/edit-product/:id" element={<EditProduct />} />
           <Route path="/detail-product/:id" element={<DetailProduct />} />
         </Routes>
-      </div>
-      </div>   
+      </div>  
     </Router>
   );
 }

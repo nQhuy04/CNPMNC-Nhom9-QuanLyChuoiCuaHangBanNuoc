@@ -3,6 +3,8 @@ const multer = require('multer');
 const path = require('path');
 const router = express.Router();
 const Product = require('../models/Product');
+const mongoose = require('mongoose');
+
 
 // Cấu hình multer để lưu trữ hình ảnh
 const storage = multer.diskStorage({
@@ -26,23 +28,24 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Lấy sản phẩm theo ID
+// GET chi tiết sản phẩm
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
 
+    // Kiểm tra tính hợp lệ của ID
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ message: 'Invalid product ID' });
+        return res.status(400).json({ message: 'ID không hợp lệ' });
     }
 
     try {
         const product = await Product.findById(id);
         if (!product) {
-            return res.status(404).json({ message: 'Product not found' });
+            return res.status(404).json({ message: 'Sản phẩm không tồn tại' });
         }
-        res.status(200).json(product);
+        res.json(product);
     } catch (error) {
-        console.error('Error fetching product:', error);
-        res.status(500).json({ message: 'Error fetching product' });
+        console.error('Lỗi khi lấy sản phẩm:', error);
+        res.status(500).json({ message: 'Có lỗi xảy ra' });
     }
 });
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './AddProduct.css'; // Nhập CSS
+import SidebarNav from '../SidebarNav/SidebarNav';
 import { useNavigate } from 'react-router-dom';
 const AddProduct = ({ onProductAdded }) => {
     const navigate = useNavigate();
@@ -70,76 +71,79 @@ const AddProduct = ({ onProductAdded }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="add-product">
-            <h2>Thêm Sản Phẩm Mới</h2>
-            <div className="form-group">
-                <label>Tên Sản Phẩm</label>
-                <input 
-                    type="text" 
-                    value={newProduct.name} 
-                    onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })} 
-                    required 
-                    className="input-field"
-                />
-            </div>
-            <div className="form-group">
-                <label>Mô Tả Sản Phẩm</label>
-                <textarea 
-                    value={newProduct.description} 
-                    onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })} 
-                    required 
-                    className="input-field"
-                />
-            </div>
-            <div className="form-group">
-                <label>Giá Sản Phẩm (VND)</label>
-                <input 
-                    type="number" 
-                    value={newProduct.price} 
-                    onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })} 
-                    required 
-                    className="input-field"
-                />
-            </div>
-            <div className="form-group">
-                <label>Hình Ảnh</label>
-                <input 
-                    type="file" 
-                    onChange={(e) => setNewProduct({ ...newProduct, image: e.target.files[0] })} 
-                    required 
-                    className="input-field"
-                />
-            </div>
-            <div className="form-group">
-                <label>Nguyên Liệu</label>
-                <div className="ingredient-inputs">
+        <div className="container_div">
+            <SidebarNav/>
+            <form onSubmit={handleSubmit} className="add-product">
+                <h2>Thêm Sản Phẩm Mới</h2>
+                <div className="form-group">
+                    <label>Tên Sản Phẩm</label>
                     <input 
                         type="text" 
-                        value={ingredientName} 
-                        onChange={(e) => setIngredientName(e.target.value)} 
-                        placeholder="Tên Nguyên Liệu" 
+                        value={newProduct.name} 
+                        onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })} 
+                        required 
                         className="input-field"
                     />
-                    <input 
-                        type="text" 
-                        value={ingredientQuantity} 
-                        onChange={(e) => setIngredientQuantity(e.target.value)} 
-                        placeholder="Số Lượng" 
-                        className="input-field"
-                    />
-                    <button type="button" onClick={handleAddIngredient} className="btn-add-ingredient">Thêm</button>
                 </div>
-                <ul className="ingredient-list">
-                    {newProduct.ingredients.map((ingredient, index) => (
-                        <li key={index} className="ingredient-item">
-                            {ingredient.ingredient} - {ingredient.quantity} 
-                            <button type="button" onClick={() => handleRemoveIngredient(index)} className="btn-remove-ingredient">Xóa</button>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <button type="submit" className="btn-submit">Thêm Sản Phẩm</button>
-        </form>
+                <div className="form-group">
+                    <label>Mô Tả Sản Phẩm</label>
+                    <textarea 
+                        value={newProduct.description} 
+                        onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })} 
+                        required 
+                        className="input-field"
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Giá Sản Phẩm (VND)</label>
+                    <input 
+                        type="number" 
+                        value={newProduct.price} 
+                        onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })} 
+                        required 
+                        className="input-field"
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Hình Ảnh</label>
+                    <input 
+                        type="file" 
+                        onChange={(e) => setNewProduct({ ...newProduct, image: e.target.files[0] })} 
+                        required 
+                        className="input-field"
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Nguyên Liệu</label>
+                    <div className="ingredient-inputs">
+                        <input 
+                            type="text" 
+                            value={ingredientName} 
+                            onChange={(e) => setIngredientName(e.target.value)} 
+                            placeholder="Tên Nguyên Liệu" 
+                            className="input-field"
+                        />
+                        <input 
+                            type="text" 
+                            value={ingredientQuantity} 
+                            onChange={(e) => setIngredientQuantity(e.target.value)} 
+                            placeholder="Số Lượng" 
+                            className="input-field"
+                        />
+                        <button type="button" onClick={handleAddIngredient} className="btn-add-ingredient">Thêm</button>
+                    </div>
+                    <ul className="ingredient-list">
+                        {newProduct.ingredients.map((ingredient, index) => (
+                            <li key={index} className="ingredient-item">
+                                {ingredient.ingredient} - {ingredient.quantity} 
+                                <button type="button" onClick={() => handleRemoveIngredient(index)} className="btn-remove-ingredient">Xóa</button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <button type="submit" className="btn-submit">Thêm Sản Phẩm</button>
+            </form>
+        </div>
     );
 };
 
