@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { logOut } from "../../redux/apiRequest.js";
 import { createAxios } from "../../createInstance";
 import { logOutSuccess } from "../../redux/authSlice";
+import { FaCoffee } from 'react-icons/fa';
 
 const NavBar = () => {
   const user = useSelector((state) => state.auth.login.currentUser);
@@ -21,6 +22,10 @@ const NavBar = () => {
   return (
     <nav className="navbar-container">
       <div className="navbar-left">
+        <Link to="/" className="navbar-logo">
+          <FaCoffee className="coffee-icon" />
+          <span>Coffee Shop</span>
+        </Link>
         {user && (
           <p className="navbar-user">Hi, <span>{user.username}</span></p>
         )}
