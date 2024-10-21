@@ -36,14 +36,19 @@ export const getAllUsers = async(accessToken, dispatch, axiosJWT)=>{
 export const deleteUser = async (accessToken, dispatch, id, axiosJWT) => {
     dispatch(deleteUserStart());
     try {
-        const res = await axiosJWT.delete("/v1/user/" + id, {
-            headers: { token: `Bearer ${accessToken}` },
-        });
-        dispatch(deleteUserSuccess(res.data)); // Res data trả về từ server là msg
+      const res = await axiosJWT.delete(`/v1/user/${id}`, {
+        headers: { token: `Bearer ${accessToken}` },
+      });
+      dispatch(deleteUserSuccess(res.data.deletedUserId));
+      return res.data; 
     } catch (err) {
-        dispatch(deleteUserFailed(err.response?.data || "Đã xảy ra lỗi khi xóa người dùng"));
+      console.error("Delete user error:", err);
+      const errorMsg = err.response?.data?.message || "An error occurred while deleting the user.";
+      dispatch(deleteUserFailed(errorMsg));
+      throw err; 
     }
-};
+  };
+
 export const logOut = async(dispatch, id, navigate, accessToken, axiosJWT)=>{
     dispatch(logOutStart());
     try {
@@ -55,4 +60,4 @@ export const logOut = async(dispatch, id, navigate, accessToken, axiosJWT)=>{
     } catch (err) {
         dispatch(logOutFailure());
     }
-}
+};

@@ -1,16 +1,17 @@
-import {createSlice} from "@reduxjs/toolkit";
+
+import { createSlice } from '@reduxjs/toolkit';
 
 const userSlice = createSlice({
-    name: 'user',
-    initialState: {
-        users: {
-            allUsers: null,
-            isFetching: false,
-            error: false
-        },
-        msg:"",
+  name: 'users',
+  initialState: {
+    users: {
+      allUsers: null,
+      isFetching: false,
+      error: false,
     },
-    reducers:{
+    msg: "",
+  },
+  reducers: {
         getUsersStart: (state)=>{
             state.users.isFetching = true;
         },
@@ -29,10 +30,10 @@ const userSlice = createSlice({
         },
         deleteUserSuccess: (state, action) => {
             state.users.isFetching = false;
-            state.users.error = false;
-            state.msg = action.payload; // Đưa thông báo thành công từ API vào
-        },
-        deleteUserFailed: (state, action) => {
+            state.msg = "User deleted successfully";
+            state.users.allUsers = state.users.allUsers.filter(user => user._id !== action.payload);
+          },
+        deleteUserFailed: (state, action)=>{
             state.users.isFetching = false;
             state.users.error = true;
             state.msg = action.payload; // Đưa thông báo lỗi từ API vào
