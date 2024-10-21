@@ -20,19 +20,21 @@ const NavBar = () => {
 
   return (
     <nav className="navbar-container">
-      {user ? (
-        <>
+      <div className="navbar-left">
+        {user && (
           <p className="navbar-user">Hi, <span>{user.username}</span></p>
-          <div className="navbar-links">
-            <Link to="/logout" className="navbar-logout" onClick={handleLogout}>Log out</Link>
-          </div>
-        </>
-      ) : (
-        <div className="navbar-links">
-          <Link to="/login" className="navbar-login">Đăng nhập</Link>
-          <Link to="/register" className="navbar-register">Đăng ký</Link>
-        </div>
-      )}
+        )}
+      </div>
+      <div className="navbar-right">
+        {user ? (
+          <Link to="/logout" className="navbar-logout" onClick={handleLogout}>Log out</Link>
+        ) : (
+          <>
+            <Link to="/login" className="navbar-login">Đăng nhập</Link>
+            <Link to="/register" className="navbar-register">Đăng ký</Link>
+          </>
+        )}
+      </div>
     </nav>
   );
 };
