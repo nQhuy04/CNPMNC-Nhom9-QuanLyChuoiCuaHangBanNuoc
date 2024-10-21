@@ -17,14 +17,10 @@ const userController = {
       if (!deletedUser) {
         return res.status(404).json({ message: "User not found" });
       }
-      res.status(200).json({ 
-        message: "User deleted successfully", 
-        deletedUserId: req.params.id,
-        success: true  // Add a success flag
-      });
+      res.status(200).json({ message: "User deleted successfully", deletedUserId: req.params.id });
     } catch (err) {
       console.error("Error deleting user:", err);
-      res.status(500).json({ message: "Error deleting user", success: false });
+      res.status(500).json({ message: "Error deleting user" });
     }
   },
 };
