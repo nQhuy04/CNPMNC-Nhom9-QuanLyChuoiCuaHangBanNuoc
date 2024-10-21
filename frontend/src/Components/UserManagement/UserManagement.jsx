@@ -13,7 +13,6 @@ const UserManagement = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
-
   const [deleteMessage, setDeleteMessage] = useState("");
 
   const handleDelete = async (id) => {

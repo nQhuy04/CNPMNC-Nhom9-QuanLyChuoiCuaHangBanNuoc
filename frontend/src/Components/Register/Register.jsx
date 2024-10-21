@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./register.css";
 import { registerUser } from "../../redux/apiRequest";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
     const [email, setEmail] = useState("");
@@ -21,7 +21,7 @@ const Register = () => {
         registerUser(newUser, dispatch, navigate);
     };
 
-    return ( 
+    return (
         <section className="register-container">
             <div className="register-title">Đăng Ký Tài Khoản</div>
             <form onSubmit={handleRegister}>
@@ -33,6 +33,12 @@ const Register = () => {
                 <input type="password" placeholder="Nhập mật khẩu" onChange={(e) => setPassword(e.target.value)} />
                 <button type="submit">Tạo Tài Khoản</button>
             </form>
+            <div className="register-login">
+                Đã có tài khoản?{" "}
+                <Link className="register-login-link" to="/login">
+                    Đăng nhập ngay
+                </Link>
+            </div>
         </section>
     );
 };

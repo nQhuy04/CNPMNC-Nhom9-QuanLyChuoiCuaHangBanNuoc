@@ -40,12 +40,12 @@ export const deleteUser = async (accessToken, dispatch, id, axiosJWT) => {
         headers: { token: `Bearer ${accessToken}` },
       });
       dispatch(deleteUserSuccess(res.data.deletedUserId));
-      return res.data; // Return the response data
+      return res.data; 
     } catch (err) {
       console.error("Delete user error:", err);
       const errorMsg = err.response?.data?.message || "An error occurred while deleting the user.";
       dispatch(deleteUserFailed(errorMsg));
-      throw err; // Re-throw the error to be handled by the component
+      throw err; 
     }
   };
 
@@ -60,4 +60,4 @@ export const logOut = async(dispatch, id, navigate, accessToken, axiosJWT)=>{
     } catch (err) {
         dispatch(logOutFailure());
     }
-}
+};

@@ -23,8 +23,10 @@ const userSlice = createSlice({
             state.users.isFetching = false;
             state.users.error = true;
         },
-        deleteUserStart: (state)=>{
+        deleteUserStart: (state) => {
             state.users.isFetching = true;
+            state.users.error = false; // Reset lỗi khi bắt đầu xóa
+            state.msg = ""; // Reset thông báo trước khi bắt đầu
         },
         deleteUserSuccess: (state, action) => {
             state.users.isFetching = false;
@@ -34,7 +36,7 @@ const userSlice = createSlice({
         deleteUserFailed: (state, action)=>{
             state.users.isFetching = false;
             state.users.error = true;
-            state.msg = action.payload;
+            state.msg = action.payload; // Đưa thông báo lỗi từ API vào
         }
     }
 })
