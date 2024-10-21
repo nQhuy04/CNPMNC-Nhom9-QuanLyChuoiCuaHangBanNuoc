@@ -14,9 +14,16 @@ const UserManagement = () => {
   const navigate = useNavigate();
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
-  const handleDelete = (id) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa người dùng này?")) {
-      deleteUser(user?.accessToken, dispatch, id, axiosJWT);
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      try {
+        await deleteUser(user?.accessToken, dispatch, id, axiosJWT);
+        // Refresh the user list after successful deletion
+        getAllUsers(user?.accessToken, dispatch, axiosJWT);
+      } catch (error) {
+        console.error("Failed to delete user:", error);
+        // Optionally, show an error message to the user
+      }
     }
   };
   

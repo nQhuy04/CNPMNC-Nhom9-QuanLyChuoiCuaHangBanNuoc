@@ -1,21 +1,26 @@
 const User = require("../models/User");
 
 const userController = {
-    getAllUsers: async(req, res)=>{
-        try {
-            const user = await User.find();
-            res.status(200).json(user);
-        } catch (err) {
-            res.status(500).json(err);
-        }
-    },
-    deleteUser: async(req, res)=>{
-        try {
-            const user = User.findByIdAndDelete(req.params.id);
-            res.status(200).json("Xóa thành công")
-        } catch (err) {
-            res.status(500).json(err);
-        }
+  getAllUsers: async (req, res) => {
+    try {
+      const users = await User.find();
+      res.status(200).json(users); // Use the plural 'users' for consistency
+    } catch (err) {
+      console.error("Error fetching users:", err); // Log the error for debugging
+      res.status(500).json({ message: "Error fetching users" }); // Provide a user-friendly error message
     }
-}
+  },
+  deleteUser: async (req, res) => {
+    try {
+      const deletedUser = await User.findByIdAndDelete(req.params.id);
+      if (!deletedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      res.status(200).json({ message: "User deleted successfully", deletedUserId: req.params.id });
+    } catch (err) {
+      console.error("Error deleting user:", err);
+      res.status(500).json({ message: "Error deleting user" });
+    }
+  },
+};
 module.exports = userController;
