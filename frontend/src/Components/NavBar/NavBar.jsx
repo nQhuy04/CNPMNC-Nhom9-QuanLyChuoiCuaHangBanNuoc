@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { logOut } from "../../redux/apiRequest.js";
 import { createAxios } from "../../createInstance";
 import { logOutSuccess } from "../../redux/authSlice";
+import { FaCoffee } from 'react-icons/fa';
 
 const NavBar = () => {
   const user = useSelector((state) => state.auth.login.currentUser);
@@ -20,19 +21,25 @@ const NavBar = () => {
 
   return (
     <nav className="navbar-container">
-      {user ? (
-        <>
+      <div className="navbar-left">
+        <Link to="/" className="navbar-logo">
+          <FaCoffee className="coffee-icon" />
+          <span>Coffee Shop</span>
+        </Link>
+        {user && (
           <p className="navbar-user">Hi, <span>{user.username}</span></p>
-          <div className="navbar-links">
-            <Link to="/logout" className="navbar-logout" onClick={handleLogout}>Log out</Link>
-          </div>
-        </>
-      ) : (
-        <div className="navbar-links">
-          <Link to="/login" className="navbar-login">Đăng nhập</Link>
-          <Link to="/register" className="navbar-register">Đăng ký</Link>
-        </div>
-      )}
+        )}
+      </div>
+      <div className="navbar-right">
+        {user ? (
+          <Link to="/logout" className="navbar-logout" onClick={handleLogout}>Log out</Link>
+        ) : (
+          <>
+            <Link to="/login" className="navbar-login">Đăng nhập</Link>
+            <Link to="/register" className="navbar-register">Đăng ký</Link>
+          </>
+        )}
+      </div>
     </nav>
   );
 };
