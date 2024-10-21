@@ -50,7 +50,7 @@
 }
 
 .product-management__table-header {
-    background-color:  rgb(76, 161, 175);
+    background-color: rgb(76, 161, 175);
     color: white;
     padding: 12px;
     text-align: left;
@@ -61,9 +61,19 @@
 }
 
 .product-management__table-cell {
+    max-width: 300px;
     padding: 12px;
     color: #333;
     vertical-align: middle;
+    text-align: justify;
+}
+
+/* Thêm CSS cho cột mô tả */
+.product-management__description-cell {
+    max-width: 300px; /* Chiều rộng tối đa cho cột mô tả */
+    overflow: hidden; /* Ẩn phần thừa */
+    text-overflow: ellipsis; /* Hiển thị dấu "..." cho nội dung bị cắt */
+    white-space: nowrap; /* Ngăn không cho nội dung xuống dòng */
 }
 
 .product-management__item-image {
@@ -80,6 +90,7 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
+    margin-right: 10px; /* Cách nhau bằng khoảng cách bên phải */
 }
 
 .product-management__edit-button {
@@ -112,20 +123,20 @@
 
 .product-management__pagination-button {
     margin: 0 5px;
-    padding: 12px 20px; /* Điều chỉnh kích thước nút */
+    padding: 12px 20px;
     border: none;
-    border-radius: 8px; /* Bo tròn góc lớn hơn */
-    background-color: #ff5722; /* Màu nền cam */
+    border-radius: 8px;
+    background-color: #ff5722;
     color: white;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s; /* Thêm hiệu ứng bóng */
-    font-weight: bold; /* Làm chữ đậm hơn */
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+    font-weight: bold;
 }
 
 .product-management__pagination-button:hover {
-    background-color: #e64a19; /* Màu nền tối hơn khi hover */
+    background-color: #e64a19;
     transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Thêm bóng khi hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .product-management__pagination-button:disabled {
@@ -133,11 +144,9 @@
     cursor: not-allowed;
 }
 
-/* Thêm lớp cho nút đang được chọn */
 .product-management__pagination-button--active {
-    background-color: #007bff; /* Màu nền xanh dương cho nút đang chọn */
-    border: 2px solid #ffffff; /* Thêm viền trắng */
-    transform: scale(1.1); /* Tăng kích thước nút đang chọn */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Thêm bóng khi chọn */
+    background-color: #007bff;
+    border: 2px solid #ffffff;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
-

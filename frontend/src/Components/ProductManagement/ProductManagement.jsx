@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Nhập useNavigate
+import { useNavigate } from 'react-router-dom'; 
 import './ProductManagement.css';
 
 
@@ -9,7 +9,7 @@ const ProductManagement = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [productsPerPage] = useState(5);
-    const navigate = useNavigate(); // Khai báo hook useNavigate
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         fetchProducts();
@@ -27,8 +27,10 @@ const ProductManagement = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
             try {
-                await axios.delete(`http://localhost:8000/api/products/${id}`);
+                await axios.delete(`http://localhost:8000/api/products/${id}`);               
                 fetchProducts();
+                
+                
             } catch (error) {
                 console.error('Error deleting product:', error.response?.data || error.message);
             }
@@ -36,9 +38,20 @@ const ProductManagement = () => {
     };
 
 
-    const handleProductAdded = () => {
-        fetchProducts();
+    const handleView = (id) => {
+        navigate(`/detail-product/${id}`);
     };
+
+    
+    const handleEdit = (id) => {
+        navigate(`/edit-product/${id}`); // Điều hướng đến trang sửa sản phẩm
+    };
+
+    const handleAddProduct = () => {
+        navigate('/add-product'); 
+    };
+    
+
 
     // Hàm lọc sản phẩm theo tên
     const filteredProducts = products.filter((product) =>
@@ -53,14 +66,7 @@ const ProductManagement = () => {
     // Chuyển trang
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-    const handleEdit = (id) => {
-        navigate(`/edit-product/${id}`); // Điều hướng đến trang sửa sản phẩm
-    };
-
-    const handleAddProduct = () => {
-        navigate('/add-product'); // Điều hướng đến trang thêm sản phẩm
-    };
-
+    
     return (
         <div className="product-management">
             <h1 className="product-management__title">Quản Lý Sản Phẩm</h1>
@@ -113,7 +119,7 @@ const ProductManagement = () => {
                                     >
                                         Xóa
                                     </button>
-                                    <button className="product-management__view-button">Xem</button>
+                                    <button  onClick={() => handleView(product._id)} className="product-management__view-button">Xem</button>
                                 </td>
                             </tr>
                         ))}

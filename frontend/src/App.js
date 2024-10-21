@@ -9,7 +9,7 @@ import Dashboard from "./Components/Dashboard/Dashboard";
 import ProductManagement from "./Components/ProductManagement/ProductManagement";
 import AddProduct from "./Components/ProductManagement/AddProduct";
 import EditProduct from "./Components/ProductManagement/EditProduct";
-
+import DetailProduct from "./Components/ProductManagement/DetailProduct";
 
 function App() {
   return (
@@ -26,7 +26,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/add-product" element={<AddProduct />} /> 
           <Route path="/edit-product/:id" element={<EditProduct />} />
-
+          <Route path="/detail-product/:id" element={<DetailProduct />} />
         </Routes>
       </div>
       </div>   
