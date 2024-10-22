@@ -8,7 +8,6 @@
 
 body,
 .App {
-  min-height: 100vh;
   margin: 0;
   scroll-behavior: smooth;
   text-rendering: optimizeSpeed;
@@ -22,3 +21,4 @@ body,
 .container_div{
   display: flex;
 }
+

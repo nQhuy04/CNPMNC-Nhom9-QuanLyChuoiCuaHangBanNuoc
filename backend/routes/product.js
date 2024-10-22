@@ -3,123 +3,128 @@ const multer = require('multer');
 const path = require('path');
 const router = express.Router();
 const Product = require('../models/Product');
+const Ingredient = require('../models/Ingredient');
 const mongoose = require('mongoose');
 
-
-// Cấu hình multer để lưu trữ hình ảnh
+const onProductAdded = () => {
+    console.log('Sản phẩm đã được thêm thành công!');
+};
+// Thiết lập lưu trữ cho multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+        cb(null, 'uploads/'); // Đường dẫn nơi lưu trữ file
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + path.extname(file.originalname));
     }
 });
-const upload = multer({ storage });
+
+const upload = multer({ storage: storage });
+
+// Thêm sản phẩm mới
+router.post('/add', upload.single('image'), async (req, res) => {
+    const { name, description, price } = req.body;
+    const ingredients = JSON.parse(req.body['ingredients[]'] || '[]');
+
+    // Kiểm tra dữ liệu cần thiết
+    if (!name || !description || !price || !req.file) {
+        return res.status(400).json({ error: 'Vui lòng cung cấp tất cả thông tin sản phẩm.' });
+    }
+
+    try {
+        const newProduct = new Product({
+            name,
+            description,
+            price,
+            imageUrl: req.file.path,
+            ingredients: ingredients.map(ing => ({
+                ingredient: ing.ingredient,
+                quantity: ing.quantity
+            }))
+        });
+
+        await newProduct.save();
+        res.status(201).json({ message: 'Sản phẩm đã được thêm thành công!' });
+    } catch (error) {
+        console.error('Error adding product:', error);
+        res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm sản phẩm.' });
+    }
+});
+
+
 
 // Lấy danh sách sản phẩm
 router.get('/', async (req, res) => {
     try {
         const products = await Product.find();
-        res.json(products);
+        res.send(products);
     } catch (error) {
-        console.error('Error fetching products:', error);
-        res.status(500).json({ message: 'Error fetching products' });
+        res.status(500).send({ message: 'Lỗi khi lấy danh sách sản phẩm.', error });
     }
 });
 
-// GET chi tiết sản phẩm
+// Lấy chi tiết sản phẩm theo ID
 router.get('/:id', async (req, res) => {
-    const { id } = req.params;
-
-    // Kiểm tra tính hợp lệ của ID
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ message: 'ID không hợp lệ' });
-    }
-
     try {
-        const product = await Product.findById(id);
+        const product = await Product.findById(req.params.id);
         if (!product) {
-            return res.status(404).json({ message: 'Sản phẩm không tồn tại' });
+            return res.status(404).send({ message: 'Sản phẩm không tồn tại.' });
         }
-        res.json(product);
+        res.send(product);
     } catch (error) {
-        console.error('Lỗi khi lấy sản phẩm:', error);
-        res.status(500).json({ message: 'Có lỗi xảy ra' });
+        res.status(500).send({ message: 'Lỗi khi lấy chi tiết sản phẩm.', error });
     }
 });
 
-
-// Thêm sản phẩm mới
-router.post('/', upload.single('image'), async (req, res) => {
-    const { name, description, price, ingredients } = req.body;
-
-    if (!name || !description || !price || !req.file) {
-        return res.status(400).json({ message: 'Tất cả các trường đều là bắt buộc.' });
-    }
-
-    const newProduct = new Product({
-        name,
-        description,
-        price,
-        image_url: req.file.path,
-        ingredients: JSON.parse(ingredients)
-    });
-
-    try {
-        await newProduct.save();
-        res.status(201).json(newProduct);
-    } catch (error) {
-        console.error('Error saving product:', error);
-        res.status(500).json({ message: 'Error saving product' });
-    }
-});
-
-// Cập nhật sản phẩm theo ID
+// Cập nhật sản phẩm
 router.put('/:id', upload.single('image'), async (req, res) => {
-    const { id } = req.params;
-    const { name, description, price, ingredients } = req.body;
+    const { name, description, price } = req.body;
+    const ingredients = JSON.parse(req.body['ingredients'] || '[]');
+    
+    // Kiểm tra dữ liệu cần thiết
+    if (!name || !description || !price) {
+        return res.status(400).json({ error: 'Vui lòng cung cấp tất cả thông tin sản phẩm.' });
+    }
 
     try {
-        const updateData = {
-            name,
-            description,
-            price,
-            ingredients: ingredients ? JSON.parse(ingredients) : undefined,
-        };
-
-        if (req.file) {
-            updateData.image_url = req.file.path;
-        }
-
-        const updatedProduct = await Product.findByIdAndUpdate(id, updateData, {
-            new: true,
-            runValidators: true,
-        });
-
+        // Tìm sản phẩm và cập nhật
+        const updatedProduct = await Product.findById(req.params.id);
         if (!updatedProduct) {
-            return res.status(404).json({ message: 'Product not found' });
+            return res.status(404).send({ message: 'Sản phẩm không tồn tại.' });
         }
 
-        res.status(200).json({ message: 'Product updated successfully', updatedProduct });
+        // Cập nhật thông tin
+        updatedProduct.name = name;
+        updatedProduct.description = description;
+        updatedProduct.price = price;
+        updatedProduct.ingredients = ingredients.map(ing => ({
+            ingredient: ing.ingredient,
+            quantity: ing.quantity
+        }));
+        
+        // Cập nhật ảnh nếu có
+        if (req.file) {
+            updatedProduct.imageUrl = req.file.path;
+        }
+
+        await updatedProduct.save();
+        res.send({ message: 'Sản phẩm đã được cập nhật thành công!', product: updatedProduct });
     } catch (error) {
-        console.error('Error updating product:', error);
-        res.status(500).json({ message: 'Error updating product' });
+        res.status(500).send({ message: 'Lỗi khi cập nhật sản phẩm.', error });
     }
 });
 
-// Xóa sản phẩm theo ID
+
+// Xóa sản phẩm
 router.delete('/:id', async (req, res) => {
-    const { id } = req.params;
     try {
-        const deletedProduct = await Product.findByIdAndDelete(id);
-        if (!deletedProduct) {
-            return res.status(404).json({ message: 'Product not found' });
+        const product = await Product.findByIdAndDelete(req.params.id);
+        if (!product) {
+            return res.status(404).send({ message: 'Sản phẩm không tồn tại.' });
         }
-        res.status(200).json({ message: 'Product deleted successfully', deletedProduct });
+        res.send({ message: 'Sản phẩm đã được xóa.', product });
     } catch (error) {
-        console.error('Error deleting product:', error);
-        res.status(500).json({ message: 'Error deleting product', error: error.message });
+        res.status(500).send({ message: 'Lỗi khi xóa sản phẩm.', error });
     }
 });
 

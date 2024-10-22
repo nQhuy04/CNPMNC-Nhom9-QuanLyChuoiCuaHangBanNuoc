@@ -34,7 +34,6 @@ form {
   margin-bottom: 0.5rem; /* Khoảng cách dưới label */
   color: #555; /* Màu chữ cho label */
   position: relative;
-  left: -115px;
 }
 
 .login_pass_label {
@@ -42,7 +41,6 @@ form {
   margin-bottom: 0.5rem; /* Khoảng cách dưới label */
   color: #555; /* Màu chữ cho label */
   position: relative;
-  left: -135px;
 }
 
 

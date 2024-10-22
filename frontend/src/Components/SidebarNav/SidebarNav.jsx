@@ -9,7 +9,7 @@ const SidebarNav = () => {
     { icon: <FiUsers />, text: 'Quản Lý Người Dùng', path: '/usermanagement' },
     { icon: <FiBox />, text: 'Quản lý sản phẩm', path: '/productmanagement' },
     { icon: <FiShoppingCart />, text: 'Quản lý đơn hàng', path: '/ordermanagement' },
-    { icon: <FiPackage />, text: 'Quản lý nguyên liệu', path: '/materialmanagement' },
+    { icon: <FiPackage />, text: 'Quản lý nguyên liệu', path: '/ingredientmanagement' },
     { icon: <FiDatabase />, text: 'Quản lý kho', path: '/inventorymanagement' },
     { icon: <FiBarChart2 />, text: 'Báo cáo', path: '/reports' },
   ];

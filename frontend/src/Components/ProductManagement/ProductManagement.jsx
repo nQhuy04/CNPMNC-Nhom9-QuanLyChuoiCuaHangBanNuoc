@@ -87,7 +87,7 @@ const ProductManagement = () => {
             <h2 className="product-management__subtitle">Danh sách sản phẩm</h2>
             <div className="product-management__table-container">
                 <table className="product-management__table">
-                    <thead>
+                    <thead >
                         <tr>
                             <th className="product-management__table-header">Hình ảnh</th>
                             <th className="product-management__table-header">Tên sản phẩm</th>
@@ -102,7 +102,7 @@ const ProductManagement = () => {
                                 <td className="product-management__table-cell">
                                     <img
                                         className="product-management__item-image"
-                                        src={product.image_url}
+                                        src={product.imageUrl}
                                         alt={product.name}
                                         style={{ width: '100px', height: 'auto' }}
                                     />

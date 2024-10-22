@@ -39,49 +39,50 @@ const DetailProduct = () => {
 
     return (
         <div className="container_div">
-            <SidebarNav/>
-        <div className="product-detail-container">
-            <h1 className="product-title">Chi Tiết Sản Phẩm</h1>
-            <div className="product-image-container">
-                <img
-                    className="product-image"
-                    src={`http://localhost:8000/${product.image_url}`} 
-                    alt={product.name}
-                />
-            </div>
-            <div className="product-info">
-                <h2 className="product-name">{product.name}</h2>
-                <p className="product-description"><strong>Mô tả:</strong> {product.description}</p>
-                <p className="product-price"><strong>Giá:</strong> {new Intl.NumberFormat().format(product.price)} VND</p>
-
-                <h3 className="ingredients-title">Nguyên liệu:</h3>
-                {product.ingredients && product.ingredients.length > 0 ? (
-                    <ul className="ingredients-list">
-                        {product.ingredients.map((ingredient, index) => (
-                            <li key={index} className="ingredient-item">
-                                {ingredient.ingredient}: {ingredient.quantity}
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p className="no-ingredients">Không có nguyên liệu.</p>
-                )}
-
-                <div className="button-group">
-                    <button className="back-button" onClick={() => navigate(-1)}>
-                        Quay lại
-                    </button>
-                    <button className="edit-button" onClick={() => navigate(`/edit-product/${id}`)}>
-                        Sửa
-                    </button>
-                    <button className="delete-button" onClick={handleDelete}>
-                        Xóa
-                    </button>
+            <SidebarNav />
+            <div className="product-detail-container">
+                <h1 className="product-title">Chi Tiết Sản Phẩm</h1>
+                <div className="product-image-container">
+                    <img
+                        className="product-image"
+                        src={`http://localhost:8000/${product.imageUrl}`} 
+                        alt={product.name}
+                    />
+                </div>
+                <div className="product-info">
+                    <h2 className="product-name">{product.name}</h2>
+                    <p className="product-description"><strong>Mô tả:</strong> {product.description}</p>
+                    <p className="product-price"><strong>Giá:</strong> {new Intl.NumberFormat().format(product.price)} VND</p>
+    
+                    <h3 className="ingredients-title">Nguyên liệu:</h3>
+                    {product.ingredients && product.ingredients.length > 0 ? (
+                        <ul className="ingredients-list">
+                            {product.ingredients.map((ingredient, index) => (
+                                <li key={index} className="ingredient-item">
+                                    {ingredient.ingredient}: <strong>{ingredient.quantity}</strong>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p className="no-ingredients">Không có nguyên liệu.</p>
+                    )}
+    
+                    <div className="button-group">
+                        <button className="back-button_details" onClick={() => navigate(-1)}>
+                            Quay lại
+                        </button>
+                        <button className="edit-button" onClick={() => navigate(`/edit-product/${id}`)}>
+                            Sửa
+                        </button>
+                        <button className="delete-button" onClick={handleDelete}>
+                            Xóa
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-        </div>
     );
-};
+}
+    
 
 export default DetailProduct;
