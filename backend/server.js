@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/user');
 const productRoute = require('./routes/product'); 
+const materialRoute = require('./routes/Material'); 
 
 dotenv.config();
 const app = express();
@@ -34,6 +35,7 @@ app.use('/uploads', express.static('uploads'));
 app.use("/v1/auth", authRoute);
 app.use("/v1/user", userRoute);
 app.use("/api/products", productRoute); 
+app.use("/api/material", materialRoute); 
 
 app.listen(Port, () => {
     console.log(`Server is running on http://localhost:${Port}`);
