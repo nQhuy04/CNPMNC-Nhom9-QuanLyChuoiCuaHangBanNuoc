@@ -1,99 +1,120 @@
-.add-product {
-    max-width: 600px;
-    margin: 0 auto;
+/* Tối ưu giao diện cho form */
+.add-product-form {
+    width: 800px;
+    margin: 40px auto;
     padding: 20px;
-    background-color: #f8f8f8;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: #f8f9fa; /* Màu nền nhạt */
+    border-radius: 8px; /* Bo tròn góc */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
 }
 
-.add-product h2 {
+/* Tiêu đề */
+.add-product-form h2 {
     text-align: center;
+    color: #343a40; /* Màu tối cho tiêu đề */
     margin-bottom: 20px;
-    color: #333;
 }
 
+/* Các nhóm trường nhập liệu */
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 15px; /* Khoảng cách giữa các trường */
 }
 
-.form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #555;
+/* Nhãn của các trường */
+.form-label {
+    display: block; /* Để nhãn trên cùng */
+    font-weight: bold; /* Làm cho nhãn đậm */
+    margin-bottom: 5px; /* Khoảng cách dưới nhãn */
 }
 
-.input-field {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    transition: border-color 0.3s;
+/* Trường nhập liệu */
+.form-input, .form-textarea, .form-select {
+    width: 100%; /* Chiều rộng đầy đủ */
+    padding: 10px; /* Padding cho cảm giác thoải mái */
+    border: 1px solid #ced4da; /* Đường viền xám nhạt */
+    border-radius: 4px; /* Bo tròn góc */
+    font-size: 16px; /* Kích thước chữ */
+    box-sizing: border-box; /* Đảm bảo padding không làm tăng chiều rộng */
+    transition: border-color 0.3s; /* Hiệu ứng chuyển tiếp */
 }
 
-.input-field:focus {
-    border-color: #4a90e2;
-    outline: none;
+/* Trường textarea */
+.form-textarea {
+    height: 100px; /* Chiều cao cho textarea */
 }
 
-.ingredient-inputs {
-    display: flex;
-    gap: 10px;
+/* Hiệu ứng hover cho trường nhập liệu */
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+    border-color: #80bdff; /* Màu viền khi focus */
+    outline: none; /* Bỏ outline */
 }
 
-.btn-add-ingredient {
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+/* Nút bấm thêm nguyên liệu */
+.btn-add {
+    background-color: #28a745; /* Màu xanh lá */
+    color: white; /* Màu chữ trắng */
+    padding: 10px 15px; /* Padding cho nút */
+    border: none; /* Không có đường viền */
+    border-radius: 4px; /* Bo tròn góc */
+    cursor: pointer; /* Con trỏ cho thấy đây là nút bấm */
+    transition: background-color 0.3s; /* Hiệu ứng chuyển tiếp */
 }
 
-.btn-add-ingredient:hover {
-    background-color: #45a049;
+/* Hiệu ứng hover cho nút bấm thêm nguyên liệu */
+.btn-add:hover {
+    background-color: #218838; /* Màu xanh đậm khi hover */
 }
 
-.ingredient-list {
-    margin-top: 10px;
-    list-style-type: none;
-    padding: 0;
+/* Danh sách nguyên liệu đã thêm */
+.added-ingredients {
+    margin-top: 20px; /* Khoảng cách trên */
 }
 
+/* Mỗi nguyên liệu trong danh sách */
 .ingredient-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px;
-    background-color: #f1f1f1;
-    border-radius: 5px;
-    margin-bottom: 5px;
+    display: flex; /* Sử dụng flexbox cho linh hoạt */
+    justify-content: space-between; /* Khoảng cách giữa nguyên liệu và nút xóa */
+    padding: 5px 0; /* Padding cho nguyên liệu */
 }
 
-.btn-remove-ingredient {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
+/* Nút xóa nguyên liệu */
+.btn-remove {
+    background-color: #dc3545; /* Màu đỏ cho nút xóa */
+    color: white; /* Màu chữ trắng */
+    border: none; /* Không có đường viền */
+    border-radius: 4px; /* Bo tròn góc */
+    cursor: pointer; /* Con trỏ cho thấy đây là nút bấm */
 }
 
-.btn-remove-ingredient:hover {
-    background-color: #c0392b;
+/* Hiệu ứng hover cho nút xóa */
+.btn-remove:hover {
+    background-color: #c82333; /* Màu đỏ đậm khi hover */
 }
 
+/* Nút submit */
 .btn-submit {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
+    background-color: #007bff; /* Màu xanh dương */
+    color: white; /* Màu chữ trắng */
+    padding: 10px 20px; /* Padding cho nút */
+    border: none; /* Không có đường viền */
+    border-radius: 4px; /* Bo tròn góc */
+    cursor: pointer; /* Con trỏ cho thấy đây là nút bấm */
+    transition: background-color 0.3s; /* Hiệu ứng chuyển tiếp */
+    width: 100%; /* Chiều rộng đầy đủ */
 }
 
+/* Hiệu ứng hover cho nút submit */
 .btn-submit:hover {
-    background-color: #0056b3;
+    background-color: #0069d9; /* Màu xanh dương đậm khi hover */
+}
+
+.back-btn_product{
+    color:#0069d9;
+    position: absolute;
+    font-size: 30px;
+}
+
+.back-btn_product:hover {
+    color: #11263d;
+    cursor: pointer;
 }

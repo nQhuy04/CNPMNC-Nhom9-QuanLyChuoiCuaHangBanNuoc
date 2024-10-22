@@ -34,7 +34,6 @@ form {
   margin-bottom: 0.5rem; /* Khoảng cách dưới label */
   color: #555; /* Màu chữ cho label */
   position: relative;
-  left: -115px;
 }
 
 .login_pass_label {
@@ -42,7 +41,6 @@ form {
   margin-bottom: 0.5rem; /* Khoảng cách dưới label */
   color: #555; /* Màu chữ cho label */
   position: relative;
-  left: -135px;
 }
 
 
@@ -85,4 +83,8 @@ button:hover {
   text-decoration: none;
   color: #ff6347; /* Màu cho liên kết đăng ký */
   font-weight: 700;
+}
+.login-err{
+  text-align: center;
+  color: red;
 }

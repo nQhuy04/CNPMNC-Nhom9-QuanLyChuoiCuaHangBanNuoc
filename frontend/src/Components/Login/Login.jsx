@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -16,7 +17,16 @@ const Login = () => {
       username,
       password,
     };
-    loginUser(newUser, dispatch, navigate);
+    try {
+      loginUser(newUser, dispatch, navigate);
+    } catch (error) {
+      if (error.response) {
+        // Display the error message coming from the controller
+        setMessage(error.response.data.message || "Đã xảy ra lỗi khi đăng nhập.");
+      } else {
+        setMessage("Lỗi kết nối đến máy chủ.");
+      }
+    }
   };
 
   return (
@@ -37,6 +47,7 @@ const Login = () => {
         />
         <button type="submit">Đăng nhập</button>
       </form>
+      {message && <p className="login-err">{message}</p>}
       <div className="login-register">
         Chưa có tài khoản?{" "}
         <Link className="login-register-link" to="/register">

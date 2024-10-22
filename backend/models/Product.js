@@ -1,19 +1,37 @@
 const mongoose = require('mongoose');
 
-// Mô hình sản phẩm
-const productSchema = new mongoose.Schema({
-    name: { type: String, required: true }, // Tên sản phẩm
-    description: { type: String, required: true }, // Mô tả sản phẩm
-    price: { type: Number, required: true }, // Giá sản phẩm
-    image_url: { type: String }, // URL hình ảnh
-    ingredients: [{ ingredient: String, quantity: String }] // Nguyên liệu
+const ingredientSchema = new mongoose.Schema({
+    ingredient: {
+        type: mongoose.Schema.Types.ObjectId, // ID nguyên liệu
+        ref: 'Ingredient', // Tham chiếu đến mô hình nguyên liệu
+        required: true // Bắt buộc
+    },
+    quantity: {
+        type: Number, // Số lượng nguyên liệu
+        required: true // Bắt buộc
+    }
 });
 
-// Hàm pre-save để tự động gán giá trị cho sản phẩm nếu cần
-productSchema.pre('save', function(next) {
-    next();
+const productSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true // Bắt buộc
+    },
+    description: {
+        type: String,
+        required: true // Bắt buộc
+    },
+    price: {
+        type: Number,
+        required: true // Bắt buộc
+    },
+    imageUrl: {
+        type: String, // Đường dẫn đến hình ảnh
+        required: true // Bắt buộc
+    },
+    ingredients: [ingredientSchema] // Danh sách nguyên liệu
 });
 
 const Product = mongoose.model('Product', productSchema);
 
-module.exports = Product; // Xuất mô hình
+module.exports = Product;
