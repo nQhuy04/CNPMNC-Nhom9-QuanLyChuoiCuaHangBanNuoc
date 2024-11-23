@@ -1,150 +1,166 @@
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; 
+import { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import SidebarNav from '../SidebarNav/SidebarNav';
-import './ProductManagement.css';
-
+import ConfirmDialog from '../ConfirmDialog/ConfirmDialog';
+import ToastNotification from '../ToastNotification/ToastNotification';
+import { AiOutlineEdit, AiOutlineDelete, AiOutlineEye } from 'react-icons/ai'; // Import new icons
+import './ProductManagement.css'; // Import file CSS
 
 const ProductManagement = () => {
+  const [products, setProducts] = useState([]);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [productIdToDelete, setProductIdToDelete] = useState(null);
+  const [toast, setToast] = useState({ message: '', type: '', visible: false });
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10); // Number of products per page
 
-    const [products, setProducts] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [currentPage, setCurrentPage] = useState(1);
-    const [productsPerPage] = useState(5);
-    const navigate = useNavigate(); 
+  const fetchProducts = useCallback(async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/v1/products');
+      setProducts(response.data);
+    } catch (error) {
+      console.error('Error fetching product list:', error);
+      showToast('Lỗi khi tải dữ liệu.', 'error');
+    }
+  }, []);
 
-    useEffect(() => {
-        fetchProducts();
-    }, []); 
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
-    const fetchProducts = async () => {
-        try {
-            const response = await axios.get('http://localhost:8000/api/products');
-            setProducts(response.data);
-        } catch (error) {
-            console.error('Error fetching products:', error.response?.data || error.message);
+  const showToast = (message, type) => {
+    setToast({ message, type, visible: true });
+    setTimeout(() => {
+      setToast((prev) => ({ ...prev, visible: false }));
+    }, 3000);
+  };
+
+  const handleDelete = async () => {
+    if (productIdToDelete) {
+      try {
+        const response = await axios.delete(`http://localhost:8000/v1/products/${productIdToDelete}`);
+        if (response.status === 200) {
+          showToast('Xóa thành công!', 'success');
+          fetchProducts();
+        } else {
+          showToast('Lỗi khi xóa sản phẩm.', 'error');
         }
-    };
+      } catch (error) {
+        console.error('Error deleting product:', error);
+        showToast('Lỗi khi xóa sản phẩm.', 'error');
+      } finally {
+        setShowConfirmDialog(false);
+        setProductIdToDelete(null);
+      }
+    }
+  };
 
-    const handleDelete = async (id) => {
-        if (window.confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
-            try {
-                await axios.delete(`http://localhost:8000/api/products/${id}`);               
-                fetchProducts();
-                
-                
-            } catch (error) {
-                console.error('Error deleting product:', error.response?.data || error.message);
-            }
-        }
-    };
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
-    const handleView = (id) => {
-        navigate(`/detail-product/${id}`);
-    };
+  return (
+    <div className="container_div">
+      <SidebarNav />
+      <div className="product-management-content">
+        <h1 className="product-management-title">Quản Lý Sản Phẩm</h1>
+        <div className="product-actions">
+          <input
+            type="text"
+            placeholder="Tìm kiếm theo tên..."
+            className="product-search-input"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <Link to="/product/add" className="product-add-button">
+            Thêm Sản Phẩm
+          </Link>
+        </div>
 
-    
-    const handleEdit = (id) => {
-        navigate(`/edit-product/${id}`); // Điều hướng đến trang sửa sản phẩm
-    };
+        <div className="table-wrapper">
+          <table className="product-table">
+            <thead className="product-thead">
+              <tr>
+                <th>STT</th>
+                <th>ID Sản Phẩm</th>
+                <th>Hình Ảnh</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Giá (VND)</th>
+                <th>Hành Động</th>
+              </tr>
+            </thead>
+            <tbody className="product-tbody">
+              {currentItems.map((product, index) => (
+                <tr key={product.productId} className="product-row">
+                  <td>{index + 1}</td> {/* Serial Number */}
+                  <td>{product.productId}</td> {/* Product ID */}
+                  <td>
+                    <img src={product.image} alt={product.name} className="product-image" />
+                  </td>
+                  <td>{product.name}</td>
+                  <td>{product.price.toLocaleString()} VND</td>
+                  <td>
+                    <div className="product-action-buttons">
+                      <Link to={`/product/detail/${product.productId}`} className="product-detail-button">
+                        <AiOutlineEye size={20} />
+                      </Link>
+                      <Link to={`/product/edit/${product.productId}`} className="product-edit-button">
+                        <AiOutlineEdit size={20} />
+                      </Link>
+                      <button
+                        onClick={() => {
+                          setShowConfirmDialog(true);
+                          setProductIdToDelete(product.productId);
+                        }}
+                        className="product-delete-button"
+                      >
+                        <AiOutlineDelete size={20} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-    const handleAddProduct = () => {
-        navigate('/add-product'); 
-    };
-    
-
-
-    // Hàm lọc sản phẩm theo tên
-    const filteredProducts = products.filter((product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    // Xác định sản phẩm hiển thị trên trang hiện tại
-    const indexOfLastProduct = currentPage * productsPerPage;
-    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-
-    // Chuyển trang
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-    
-    return (
-        <div className="container_div">
-            <SidebarNav/>
-        <div className="product-management">
-            <h1 className="product-management__title">Quản Lý Sản Phẩm</h1>
-            <button className="product-management__add-button" onClick={handleAddProduct}>
-                Thêm sản phẩm
+        <div className="pagination">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index + 1}
+              className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              {index + 1}
             </button>
-            <input
-                type="text"
-                placeholder="Tìm kiếm sản phẩm..."
-                className="product-management__search-input"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <h2 className="product-management__subtitle">Danh sách sản phẩm</h2>
-            <div className="product-management__table-container">
-                <table className="product-management__table">
-                    <thead >
-                        <tr>
-                            <th className="product-management__table-header">Hình ảnh</th>
-                            <th className="product-management__table-header">Tên sản phẩm</th>
-                            <th className="product-management__table-header">Mô tả</th>
-                            <th className="product-management__table-header">Giá (VND)</th>
-                            <th className="product-management__table-header">Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentProducts.map((product) => (
-                            <tr key={product._id} className="product-management__table-row">
-                                <td className="product-management__table-cell">
-                                    <img
-                                        className="product-management__item-image"
-                                        src={product.imageUrl}
-                                        alt={product.name}
-                                        style={{ width: '100px', height: 'auto' }}
-                                    />
-                                </td>
-                                <td className="product-management__table-cell">{product.name}</td>
-                                <td className="product-management__table-cell">{product.description}</td>
-                                <td className="product-management__table-cell">{new Intl.NumberFormat().format(product.price)} VND</td>
-                                <td className="product-management__table-cell">
-                                    <button 
-                                        className="product-management__edit-button" 
-                                        onClick={() => handleEdit(product._id)}
-                                    >
-                                        Sửa
-                                    </button>
-                                    <button 
-                                        className="product-management__delete-button" 
-                                        onClick={() => handleDelete(product._id)}
-                                    >
-                                        Xóa
-                                    </button>
-                                    <button  onClick={() => handleView(product._id)} className="product-management__view-button">Xem</button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-            <div className="product-management__pagination">
-                {Array.from({ length: Math.ceil(filteredProducts.length / productsPerPage) }, (_, index) => (
-                    <button 
-                        key={index + 1} 
-                        onClick={() => paginate(index + 1)} 
-                        className="product-management__pagination-button"
-                    >
-                        {index + 1}
-                    </button>
-                ))}
-            </div>
+          ))}
         </div>
-        </div>
-    );
+      </div>
 
+      {showConfirmDialog && (
+        <ConfirmDialog
+          message="Bạn có chắc chắn muốn xóa sản phẩm này không?"
+          onConfirm={handleDelete}
+          onCancel={() => setShowConfirmDialog(false)}
+        />
+      )}
+
+      {toast.visible && (
+        <ToastNotification
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast((prev) => ({ ...prev, visible: false }))}
+        />
+      )}
+    </div>
+  );
 };
 
 export default ProductManagement;

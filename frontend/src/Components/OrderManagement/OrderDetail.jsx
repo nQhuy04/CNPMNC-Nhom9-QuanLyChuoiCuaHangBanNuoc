@@ -1,100 +1,94 @@
-// OrderDetail.jsx
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import SidebarNav from '../SidebarNav/SidebarNav'; // Import SidebarNav
+import './OrderDetail.css';
+import { useNavigate } from 'react-router-dom';
+import ToastNotification from '../ToastNotification/ToastNotification'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import './OrderDetail.css';
-import SidebarNav from '../SidebarNav/SidebarNav';
 
-function OrderDetail() {
-    const { orderId } = useParams(); // Lấy ID đơn hàng từ URL
-    const [order, setOrder] = useState(null);
-    const [status, setStatus] = useState(''); // Trạng thái đơn hàng hiện tại
-    const navigate = useNavigate(); // Khai báo để điều hướng
+const OrderDetail = () => {
+  const { id } = useParams();
+  const [order, setOrder] = useState(null);
+  const navigate = useNavigate();
 
-    // Lấy thông tin chi tiết đơn hàng
-    useEffect(() => {
-        const fetchOrderDetails = async () => {
-            try {
-                const response = await axios.get(`http://localhost:8000/api/orders/${orderId}`);
-                setOrder(response.data);
-                setStatus(response.data.status); // Lưu trạng thái hiện tại
-            } catch (error) {
-                console.error('Lỗi khi lấy chi tiết đơn hàng:', error);
-            }
-        };
-        fetchOrderDetails();
-    }, [orderId]);
-
-    // Xử lý khi thay đổi trạng thái
-    const handleStatusChange = async (newStatus) => {
-        try {
-            await axios.put(`http://localhost:8000/api/orders/${orderId}`, { status: newStatus });
-            setStatus(newStatus); // Cập nhật trạng thái trong giao diện
-        } catch (error) {
-            console.error('Lỗi khi cập nhật trạng thái:', error);
-        }
+  useEffect(() => {
+    const fetchOrderDetail = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/v1/order/${id}`);
+        setOrder(response.data);
+      } catch (error) {
+        console.error('Error fetching order details:', error);
+      }
     };
+    fetchOrderDetail();
+  }, [id]);
 
-    return (
-        <div className="container_div">
-            <SidebarNav/>
-        <div className="order-detail-container">
-            <FontAwesomeIcon 
-                icon={faArrowLeft} 
-                className="back-icon" 
-                onClick={() => navigate(-1)}
-                title="Quay lại"
-            />
-            {order ? (
-                <>
-                    <h1>Chi Tiết Đơn Hàng</h1>
-                    <h2>Khách Hàng: {order.customer?.username || 'Không có'}</h2>
-                    <h3>Tổng Tiền: {order.totalAmount.toLocaleString()} VND</h3>
-                    
-                    {/* Trạng thái đơn hàng */}
-                    <div className="order-status">
-                        <label htmlFor="status">Trạng Thái: </label>
-                        <select 
-                            id="status" 
-                            value={status} 
-                            onChange={(e) => handleStatusChange(e.target.value)}
-                        >
-                            <option value="Pending">Pending</option>
-                            <option value="Completed">Completed</option>
-                            <option value="Cancelled">Cancelled</option>
-                        </select>
-                    </div>
+  if (!order) return <div className="loading">Loading...</div>;
 
-                    <h4>Danh Sách Sản Phẩm:</h4>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Tên Sản Phẩm</th>
-                                <th>Giá (VND)</th>
-                                <th>Số Lượng</th>
-                                <th>Thành Tiền (VND)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {order.products.map((item) => (
-                                <tr key={item.product._id}>
-                                    <td>{item.product.name}</td>
-                                    <td>{item.product.price.toLocaleString()}</td>
-                                    <td>{item.quantity}</td>
-                                    <td>{(item.product.price * item.quantity).toLocaleString()}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </>
-            ) : (
-                <p>Đang tải thông tin chi tiết...</p>
-            )}
+  return (
+    <div className="container_div">
+      <SidebarNav /> 
+      <div className="order-detail-container">
+      <FontAwesomeIcon 
+                    icon={faArrowLeft} 
+                    className="back-btn_order-detail" 
+                    onClick={() => navigate(-1)}
+                    title="Quay lại"
+                />
+        <h1 className="order-detail-title">Chi Tiết Đơn Hàng: {order.orderId}</h1>
+
+        <table className="order-info-table">
+          <tbody>
+            <tr>
+              <th>Khách hàng:</th>
+              <td>{order.customerId?.name || 'Không có thông tin'}</td>
+            </tr>
+            <tr>
+              <th>Ngày đặt hàng:</th>
+              <td>{new Date(order.orderDate).toLocaleDateString()}</td>
+            </tr>
+            <tr>
+              <th>Tổng tiền:</th>
+              <td>{order.totalAmount.toLocaleString()} VND</td>
+            </tr>
+            {/* Add Payment Method */}
+            <tr>
+              <th>Phương thức thanh toán:</th>
+              <td>{order.paymentMethod || 'Không có thông tin'}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2 className="order-detail-subtitle">Danh sách sản phẩm</h2>
+        <table className="order-items-table">
+          <thead>
+            <tr>
+              <th>Tên Sản Phẩm</th>
+              <th>Số Lượng</th>
+              <th>Đơn Giá (VND)</th>
+              <th>Thành Tiền (VND)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {order.items.map((item) => (
+              <tr key={item.productId._id}>
+                <td>{item.productId.name}</td>
+                <td>{item.quantity}</td>
+                <td>{item.productId.price.toLocaleString()}</td>
+                <td>{(item.quantity * item.productId.price).toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div className="order-total">
+          <strong>Tổng cộng:</strong> {order.totalAmount.toLocaleString()} VND
         </div>
-        </div>
-    );
-}
+      </div>
+    </div>
+  );
+};
 
 export default OrderDetail;

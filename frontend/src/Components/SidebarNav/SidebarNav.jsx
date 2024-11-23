@@ -7,11 +7,11 @@ const SidebarNav = () => {
   const menuItems = [
     { icon: <FiHome />, text: 'Bảng điều khiển', path: '/' },
     { icon: <FiUsers />, text: 'Quản Lý Người Dùng', path: '/usermanagement' },
-    { icon: <FiBox />, text: 'Quản lý sản phẩm', path: '/productmanagement' },
-    { icon: <FiShoppingCart />, text: 'Quản lý đơn hàng', path: '/ordermanagement' },
-    { icon: <FiPackage />, text: 'Quản lý nguyên liệu', path: '/ingredientmanagement' },
-    { icon: <FiDatabase />, text: 'Quản lý kho', path: '/inventorymanagement' },
-    { icon: <FiBarChart2 />, text: 'Báo cáo', path: '/reports' },
+    { icon: <FiBox />, text: 'Quản lý sản phẩm', path: '/product' },
+    { icon: <FiShoppingCart />, text: 'Quản lý đơn hàng', path: '/order' },
+    { icon: <FiPackage />, text: 'Quản lý danh mục', path: '/category' },
+    { icon: <FiDatabase />, text: 'Quản lý kho', path: '/inventory' },
+    { icon: <FiBarChart2 />, text: 'Báo cáo', path: '/report' },
   ];
 
   return (

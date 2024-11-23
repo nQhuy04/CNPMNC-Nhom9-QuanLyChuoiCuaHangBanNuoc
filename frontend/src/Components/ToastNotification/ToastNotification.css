@@ -1,0 +1,50 @@
+/* Components/ToastNotification/ToastNotification.css */
+
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: fadeIn 0.5s; /* Hiệu ứng hiện ra */
+}
+
+.success {
+    background-color: #4caf50; /* Màu xanh lá cho thông báo thành công */
+}
+
+.error {
+    background-color: #f44336; /* Màu đỏ cho thông báo lỗi */
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+/* Hiệu ứng hiện ra */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Hiệu ứng mờ dần khi ẩn */
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* Class cho việc ẩn */
+.fade-out {
+    animation: fadeOut 0.5s forwards; /* Hiệu ứng mờ dần */
+}

@@ -1,0 +1,99 @@
+
+.category-management {
+  margin-left: 20px;
+  flex: 1;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.category-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.add-category-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  text-decoration: none;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  display: inline-block;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
+}
+
+.add-category-button:hover {
+  background-color: #45a049;
+}
+
+.category-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-header {
+  background-color: #4ba1ae;
+}
+
+.table-header-item {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 2px solid #ddd;
+  color: white;
+}
+
+.table-row {
+  height: 50px;
+  background-color: #ffffff;
+  transition: background-color 0.2s;
+}
+
+.table-row:hover {
+  background-color: #f1f1f1;
+}
+
+.table-cell {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  vertical-align: middle;
+}
+
+/* Định dạng nút icon */
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.2s, background-color 0.3s;
+}
+
+.icon-button:hover {
+  transform: scale(1.05);
+}
+
+.edit-button {
+  background-color: #ffc107;
+  margin-right: 5px;
+}
+
+.edit-button:hover {
+  background-color: #e0a800;
+}
+
+.delete-button {
+  background-color: #dc3545;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}

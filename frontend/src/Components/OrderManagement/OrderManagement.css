@@ -1,97 +1,270 @@
-
-.order-management-wrapper {
+/* Tổng quan container */
+.container_div {
     display: flex;
-    background-color: #f3f4f6;
-    min-height: 100vh;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100vh;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f6f8;
 }
 
+/* Sidebar */
+.sidebar-nav {
+    width: 250px;
+    background-color: #343a40;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
 
-.order-management-content {
+/* Nội dung chính */
+.order-content {
     flex: 1;
-    padding: 40px;
+    padding: 30px;
     background-color: white;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin: 20px;
-    border-radius: 12px;
+    overflow-y: auto;
 }
 
-/* Tiêu đề chính */
-.order-management-title {
+/* Tiêu đề */
+.order-title {
     font-size: 2rem;
-    color: #333;
+    color: rgb(76, 161, 175);
     margin-bottom: 20px;
-    text-align: center;
     font-weight: 600;
 }
 
-/* Container cho danh sách đơn hàng */
-.order-list-container {
+/* Thao tác tìm kiếm */
+.order-actions {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    width: 300px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: #28a745;
+}
+
+/* Bảng đơn hàng */
+.table-wrapper {
+    overflow-x: auto;
     margin-top: 20px;
 }
 
-.order-list-title {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    color: #555;
-    text-align: center;
-}
-
-/* Bảng danh sách đơn hàng */
 .order-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
+    border-radius: 8px;
     background-color: #fff;
-    border-radius: 10px;
-    overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.order-table th,
-.order-table td {
-    padding: 15px;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
-}
-
-.order-table th {
+.order-thead th {
     background-color: rgb(76, 161, 175);
     color: white;
-    font-weight: bold;
+    padding: 16px;
+    text-align: left;
+    font-size: 1rem;
+    text-transform: uppercase;
+    border-bottom: 2px solid #ddd;
 }
 
-.order-table tbody tr:hover {
-    background-color: #f1f1f1;
+.order-tbody td {
+    padding: 16px;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid #eee;
+}
+
+.order-tbody .order-row:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.order-tbody .order-row:hover {
+    background-color: #e9ecef;
 }
 
 /* Nút hành động */
-.action-btn {
-    padding: 8px 16px;
-    margin: 0 5px;
-    border: none;
-    border-radius: 5px;
+.action-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.icon-button {
+    padding: 8px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/* Nút chi tiết */
-.detail-btn {
-    background-color: #3498db;
+.detail-button {
+    background-color: #17a2b8;
+}
+
+.delete-button {
+    background-color: #dc3545;
+}
+
+.icon-button:hover {
+    transform: scale(1.05);
+}
+
+.icon-button:active {
+    transform: scale(0.95);
+}
+
+/* Phân trang */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination-button {
+    padding: 12px 18px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin: 0 5px;
+    background-color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.pagination-button:hover {
+    background-color: #f1f1f1;
+}
+
+.pagination-button.active {
+    background-color: rgb(76, 161, 175);
     color: white;
 }
 
-.detail-btn:hover {
-    background-color: #2980b9;
+/* Toast thông báo */
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.5s ease-in-out;
 }
 
-/* Nút xóa */
-.delete-btn {
-    background-color: #e74c3c;
+.toast-notification.error {
+    background-color: #dc3545;
+}
+
+.toast-notification.success {
+    background-color: #28a745;
+}
+
+/* Modal confirm */
+.confirm-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+}
+
+.confirm-dialog .confirm-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.confirm-dialog .confirm-button,
+.confirm-dialog .cancel-button {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.confirm-button {
+    background-color: #28a745;
     color: white;
 }
 
-.delete-btn:hover {
-    background-color: #c0392b;
+.cancel-button {
+    background-color: #f1f1f1;
+    color: #333;
+}
+
+.confirm-button:hover {
+    background-color: #218838;
+}
+
+.cancel-button:hover {
+    background-color: #e0e0e0;
+}
+
+/* Styling for the status dropdown */
+.status-select {
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 150px;
+    background-color: #f9f9f9;
+}
+
+/* Status colors */
+.status-pending {
+    background-color: #ffeb3b;
+    color: #fff;
+}
+
+.status-processing {
+    background-color: #ff9800;
+    color: #fff;
+}
+
+.status-completed {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.status-canceled {
+    background-color: #f44336;
+    color: #fff;
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+    .order-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .order-table {
+        min-width: 500px;
+    }
+
+    .search-input {
+        width: 100%;
+    }
+
+    .pagination-button {
+        padding: 10px 14px;
+    }
 }

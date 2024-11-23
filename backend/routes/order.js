@@ -1,47 +1,96 @@
-const express = require('express');
-const Order = require('../models/Order'); 
-const Product = require('../models/Product'); 
-
-
+const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
+const Order = require("../models/Order");
+const Product = require("../models/Product");
+const Customer = require("../models/Customer");
+const Inventory = require("../models/Inventory"); // Thêm mô hình Inventory
 
-// Hàm thêm đơn hàng
-router.post('/orders', async (req, res) => {
-    const { customer, products } = req.body;
-
-    if (!Array.isArray(products) || products.length === 0) {
-        return res.status(400).json({ message: 'Products must be a non-empty array' });
+// Hàm tự sinh OrderId theo định dạng DH001, DH002, ...
+async function generateOrderId() {
+    const lastOrder = await Order.findOne().sort({ createdAt: -1 });
+    if (!lastOrder || !lastOrder.orderId) {
+        return "DH001";
     }
+    const lastOrderId = lastOrder.orderId;
+    const numericPart = parseInt(lastOrderId.substring(2), 10) + 1;
+    const newOrderId = `DH${String(numericPart).padStart(3, "0")}`;
+    return newOrderId;
+}
 
-    // Tính tổng tiền
-    let totalAmount = 0;
-    
-    // Sử dụng Promise.all để lấy giá cho tất cả sản phẩm
+// 1. Tạo đơn hàng
+router.post("/", async (req, res) => {
     try {
-        const productPromises = products.map(async (item) => {
-            const product = await Product.findById(item.product); // Lấy sản phẩm theo ID
-            if (!product) {
-                throw new Error(`Product not found for ID: ${item.product}`);
-            }
-            // Tính tổng tiền cho từng sản phẩm
-            const price = product.price;
-            const quantity = item.quantity;
-            totalAmount += price * quantity; // Cộng vào tổng tiền
-        });
+        const { customerId, items, paymentMethod } = req.body;  // Lấy paymentMethod từ body
 
-        // Chờ tất cả Promise hoàn thành
-        await Promise.all(productPromises);
-
-        // Kiểm tra xem tổng tiền có hợp lệ không
-        if (totalAmount <= 0) {
-            return res.status(400).json({ message: 'Total amount must be greater than zero' });
+        // Kiểm tra phương thức thanh toán hợp lệ
+        const validPaymentMethods = ['Tiền mặt', 'Thẻ tín dụng', 'Ví điện tử', 'Chuyển khoản'];
+        if (!validPaymentMethods.includes(paymentMethod)) {
+            return res.status(400).json({ message: "Phương thức thanh toán không hợp lệ" });
         }
 
+        // Chuyển đổi customerId thành ObjectId
+        const customerObjectId = new mongoose.Types.ObjectId(customerId);
+
+        // Kiểm tra khách hàng có tồn tại
+        const customer = await Customer.findById(customerObjectId);
+        if (!customer) {
+            return res.status(404).json({ message: "Khách hàng không tồn tại" });
+        }
+
+        // Tính tổng tiền và chuyển đổi productId thành ObjectId
+        let totalAmount = 0;
+        const updatedItems = await Promise.all(
+            items.map(async (item) => {
+                const productObjectId = new mongoose.Types.ObjectId(item.productId);
+                const product = await Product.findById(productObjectId);
+                if (!product) {
+                    throw new Error(`Sản phẩm với ID ${item.productId} không tồn tại`);
+                }
+                const itemTotal = product.price * item.quantity;
+                totalAmount += itemTotal;
+                return {
+                    productId: productObjectId,
+                    quantity: item.quantity,
+                    ingredients: product.ingredients, // Lấy thông tin nguyên liệu từ sản phẩm
+                };
+            })
+        );
+
+        // Tự sinh OrderId
+        const orderId = await generateOrderId();
+
+        // Tạo đơn hàng mới và thêm phương thức thanh toán
         const newOrder = new Order({
-            customer,
-            products,
+            orderId,
+            customerId: customerObjectId,
+            items: updatedItems,
             totalAmount,
+            paymentMethod,  // Thêm phương thức thanh toán vào đơn hàng
         });
+
+        // Cập nhật kho sau khi tạo đơn hàng
+        for (let item of updatedItems) {
+            for (let ingredient of item.ingredients) {
+                const inventory = await Inventory.findById(ingredient.inventoryId);
+                if (!inventory) {
+                    return res.status(404).json({
+                        message: `Nguyên liệu ${ingredient.inventoryId} không tồn tại trong kho`,
+                    });
+                }
+
+                // Kiểm tra tồn kho
+                if (inventory.stockQuantity < ingredient.quantity * item.quantity) {
+                    return res.status(400).json({
+                        message: `Kho không đủ nguyên liệu ${inventory.name} để sản xuất sản phẩm`,
+                    });
+                }
+
+                // Trừ nguyên liệu trong kho
+                inventory.stockQuantity -= ingredient.quantity * item.quantity;
+                await inventory.save();
+            }
+        }
 
         const savedOrder = await newOrder.save();
         res.status(201).json(savedOrder);
@@ -50,70 +99,133 @@ router.post('/orders', async (req, res) => {
     }
 });
 
-// Hàm lấy danh sách đơn hàng
-router.get('/orders', async (req, res) => {
-    const { page = 1, limit = 10, customerName } = req.query;
 
-    // Tạo query tìm kiếm
-    const query = customerName ? { 'customer.name': { $regex: customerName, $options: 'i' } } : {};
-
+// 2. Lấy danh sách tất cả đơn hàng
+router.get("/", async (req, res) => {
     try {
-        const orders = await Order.find(query)
-            .populate('customer', 'username email')
-            .populate('products.product', 'name price')
-            .limit(limit * 1)
-            .skip((page - 1) * limit)
-            .exec();
-
-        const count = await Order.countDocuments(query);
-
-        res.status(200).json({
-            orders,
-            totalPages: Math.ceil(count / limit),
-            currentPage: page,
-        });
+        const orders = await Order.find()
+            .populate("customerId", "name")
+            .populate("items.productId", "name price");
+        res.status(200).json(orders);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
 
-// Hàm xóa đơn hàng
-router.delete('/orders/:id', async (req, res) => {
-    const { id } = req.params;
-
+// Lấy chi tiết đơn hàng theo orderId
+router.get("/:id", async (req, res) => {
     try {
-        const deletedOrder = await Order.findByIdAndDelete(id);
-        if (!deletedOrder) return res.status(404).json({ message: 'Order not found' });
-        res.status(200).json({ message: 'Order deleted successfully' });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
-
-router.put('/:orderId', async (req, res) => {
-    try {
-        const { status } = req.body;
-        const order = await Order.findByIdAndUpdate(req.params.orderId, { status }, { new: true });
-        res.status(200).json(order);
-    } catch (error) {
-        res.status(500).json({ error: 'Lỗi khi cập nhật trạng thái đơn hàng' });
-    }
-});
-
-// Hàm lấy đơn hàng theo ID
-router.get('/orders/:id', async (req, res) => {
-    const { id } = req.params; // Lấy ID từ URL
-
-    try {
-        const order = await Order.findById(id)
-            .populate('customer', 'username email') // Nếu bạn có thông tin người dùng cần hiển thị
-            .populate('products.product', 'name price'); // Nếu bạn có thông tin sản phẩm cần hiển thị
+        const { id } = req.params;
+        // Tìm kiếm đơn hàng bằng `orderId` thay vì `_id`
+        const order = await Order.findOne({ orderId: id })
+            .populate("customerId", "name")
+            .populate("items.productId", "name price");
 
         if (!order) {
-            return res.status(404).json({ message: 'Order not found' });
+            return res.status(404).json({ message: "Đơn hàng không tồn tại" });
         }
-        
         res.status(200).json(order);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Sửa items của đơn hàng theo `orderId`
+router.put("/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { items, paymentMethod } = req.body;
+
+        // Kiểm tra phương thức thanh toán hợp lệ
+        const validPaymentMethods = ['Tiền mặt', 'Thẻ tín dụng', 'Ví điện tử', 'Chuyển khoản'];
+        if (paymentMethod && !validPaymentMethods.includes(paymentMethod)) {
+            return res.status(400).json({ message: "Phương thức thanh toán không hợp lệ" });
+        }
+
+        // Tìm kiếm đơn hàng
+        const existingOrder = await Order.findOne({ orderId: id });
+        if (!existingOrder) {
+            return res.status(404).json({ message: "Đơn hàng không tồn tại" });
+        }
+
+        // Tính lại tổng tiền và cập nhật items
+        let totalAmount = 0;
+        const updatedItems = await Promise.all(
+            items.map(async (item) => {
+                const productObjectId = new mongoose.Types.ObjectId(item.productId);
+                const product = await Product.findById(productObjectId);
+                if (!product) {
+                    throw new Error(`Sản phẩm với ID ${item.productId} không tồn tại`);
+                }
+                const itemTotal = product.price * item.quantity;
+                totalAmount += itemTotal;
+                return {
+                    productId: productObjectId,
+                    quantity: item.quantity,
+                };
+            })
+        );
+
+        // Cập nhật đơn hàng với các thông tin mới
+        existingOrder.items = updatedItems;
+        existingOrder.totalAmount = totalAmount;
+
+        // Cập nhật phương thức thanh toán nếu có
+        if (paymentMethod) {
+            existingOrder.paymentMethod = paymentMethod;
+        }
+
+        const updatedOrder = await existingOrder.save();
+        res.status(200).json(updatedOrder);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
+// 4. Cập nhật trạng thái đơn hàng
+router.put("/:id/status", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        // Kiểm tra trạng thái hợp lệ
+        const validStatuses = ['Chưa xử lý', 'Đang xử lý', 'Đã giao hàng', 'Đã hủy'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ message: "Trạng thái không hợp lệ" });
+        }
+
+        // Tìm và cập nhật trạng thái đơn hàng
+        const updatedOrder = await Order.findOneAndUpdate(
+            { orderId: id },  // Tìm theo orderId
+            { status },
+            { new: true }  // Trả về đối tượng đã cập nhật
+        );
+
+        if (!updatedOrder) {
+            return res.status(404).json({ message: "Đơn hàng không tồn tại" });
+        }
+
+        res.status(200).json(updatedOrder);
+    } catch (error) {
+        console.error('Error updating order status:', error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// 5. Xóa đơn hàng theo orderID
+router.delete("/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        // Tìm và xóa đơn hàng dựa trên `orderId`
+        const deletedOrder = await Order.findOneAndDelete({ orderId: id });
+
+        if (!deletedOrder) {
+            return res.status(404).json({ message: "Đơn hàng không tồn tại" });
+        }
+
+        res.status(200).json({ message: `Đã xóa đơn hàng ${id} thành công` });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

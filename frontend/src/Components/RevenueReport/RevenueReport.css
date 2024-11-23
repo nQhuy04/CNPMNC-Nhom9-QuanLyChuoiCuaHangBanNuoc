@@ -1,0 +1,88 @@
+
+
+/* Nội dung chính */
+.revenue-report {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 5px;
+}
+
+.filter-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filter {
+  margin-right: 20px;
+}
+
+.filter label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.date-input {
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+}
+
+.filter-button {
+  padding: 7px 15px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.filter-button:hover {
+  background-color: #2980b9;
+}
+
+.revenue-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.revenue-table th,
+.revenue-table td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ecf0f1;
+}
+
+.revenue-table th {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.revenue-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.back_btn_RevenueReport{
+  font-size: 20px !important;
+  color: #0069d9 !important;
+}
+
+.back_btn_RevenueReport:hover{
+  color: #11263d !important;
+  cursor: pointer;
+}

@@ -1,0 +1,139 @@
+
+
+.edit-inventory-content {
+    flex: 1;
+    padding: 50px 20px 20px 20px;
+    background-color: #f9f9f9; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    margin-left: 20px;
+}
+
+.edit-inventory-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.edit-inventory-info {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.edit-inventory-item {
+    margin-bottom: 15px;
+}
+
+.edit-inventory-item label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.edit-inventory-item input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    transition: border-color 0.3s;
+}
+
+.edit-inventory-item input:focus {
+    border-color: #28a745;
+    outline: none;
+}
+
+.edit-inventory-save-button {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px; /* Khoảng cách phía dưới cho nút lưu */
+}
+
+.edit-inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px; /* Khoảng cách trên cho bảng */
+    background-color: #fff; /* Nền trắng cho bảng */
+    border-radius: 8px; /* Góc bo tròn cho bảng */
+    overflow: hidden; /* Ẩn viền ngoài */
+}
+
+.edit-inventory-table th,
+.edit-inventory-table td {
+    border: 1px solid #ddd; /* Viền nhạt cho bảng */
+    padding: 12px;
+    text-align: center;
+}
+
+.edit-inventory-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #333; /* Màu chữ tối hơn cho header */
+}
+
+.edit-inventory-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Màu nền cho hàng chẵn */
+}
+
+.edit-inventory-table tr:hover {
+    background-color: #e9ecef; /* Hiệu ứng hover cho hàng */
+}
+
+.edit-inventory-price-input {
+    width: 80%; /* Chiều rộng của input giá */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+.edit-inventory-price-input:focus {
+    border-color: #28a745;
+    outline: none;
+}
+
+.back_btn_inventory {
+    cursor: pointer;
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #007bff;
+}
+
+.back_btn_inventory:hover {
+    color: #0056b3;
+}
+
+.edit-inventory-subtitle {
+    font-size: 20px;
+    margin: 20px 0 10px 0;
+    font-weight: bold;
+}
+
+.edit-inventory-date-input {
+    width: 100%; /* Chiều rộng của ô nhập ngày */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+.edit-inventory-date-input:focus {
+    border-color: #28a745;
+    outline: none;
+}
+
+.edit-inventory-quantity-input {
+    width: 100%; /* Chiều rộng của ô nhập số lượng */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+.edit-inventory-quantity-input:focus {
+    border-color: #28a745;
+    outline: none;
+}
+
