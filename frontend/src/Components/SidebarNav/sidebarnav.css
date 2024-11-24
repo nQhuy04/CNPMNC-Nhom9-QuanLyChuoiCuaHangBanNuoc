@@ -3,7 +3,7 @@
   min-width: 250px;
   background: linear-gradient(135deg, #2c3e50, #3498db);
   color: white;
-  height: auto;
+  height: 100%;
   padding: 20px 0;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 }

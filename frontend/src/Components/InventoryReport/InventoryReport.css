@@ -1,0 +1,128 @@
+/* Layout tổng thể */
+.container_div {
+    display: flex;
+    height: 100vh;
+    background-color: #f4f4f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Sidebar */
+  .sidebar-nav {
+    background-color: #2c3e50;
+    color: #fff;
+    padding: 20px;
+    width: 250px;
+    position: fixed;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+  
+  /* Nội dung chính */
+  .inventory-report {
+    flex-grow: 1;
+    margin-left: 20px;
+    padding: 30px;
+    overflow-y: auto;
+    position: relative;
+    background-color: #fff;
+  }
+  
+  /* Tiêu đề */
+  .title {
+    font-size: 30px;
+    color: #3498db;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: bold;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+  }
+  
+  /* Nút quay lại */
+  .back_btn_InventoryReport {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 25px;
+    color: #3498db;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .back_btn_InventoryReport:hover {
+    color: #2980b9;
+  }
+  
+  /* Phần từng loại tồn kho */
+  .inventory-section {
+    margin-bottom: 40px;
+  }
+  
+  .section-title {
+    font-size: 20px;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    border-left: 5px solid #3498db;
+    padding-left: 10px;
+    font-weight: bold;
+    background-color: #ecf0f1;
+    padding: 10px;
+  }
+  
+  /* Bảng dữ liệu */
+  .inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .inventory-table th,
+  .inventory-table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ecf0f1;
+  }
+  
+  .inventory-table th {
+    background-color: #3498db;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .inventory-table td {
+    background-color: #f9f9f9;
+    color: #2c3e50;
+  }
+  
+  .inventory-table tr:nth-child(even) td {
+    background-color: #ecf0f1;
+  }
+  
+  .inventory-table tr:hover td {
+    background-color: #d6eaf8;
+    cursor: pointer;
+  }
+  
+  /* Responsive design cho màn hình nhỏ */
+  @media (max-width: 768px) {
+    .container_div {
+      flex-direction: column;
+    }
+  
+    .inventory-report {
+      margin-left: 0;
+    }
+  
+    .back_btn_InventoryReport {
+      top: 10px;
+      left: 10px;
+    }
+  
+    .inventory-table th,
+    .inventory-table td {
+      padding: 8px;
+    }
+  }
+  

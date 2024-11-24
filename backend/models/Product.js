@@ -1,37 +1,46 @@
 const mongoose = require('mongoose');
 
-const ingredientSchema = new mongoose.Schema({
-    ingredient: {
-        type: mongoose.Schema.Types.ObjectId, // ID nguyên liệu
-        ref: 'Ingredient', // Tham chiếu đến mô hình nguyên liệu
-        required: true // Bắt buộc
+const productSchema = new mongoose.Schema(
+  {
+    productId: {
+      type: String,
+      required: true,
+      unique: true,
     },
-    quantity: {
-        type: Number, // Số lượng nguyên liệu
-        required: true // Bắt buộc
-    }
-});
-
-const productSchema = new mongoose.Schema({
     name: {
-        type: String,
-        required: true // Bắt buộc
-    },
-    description: {
-        type: String,
-        required: true // Bắt buộc
+      type: String,
+      required: true,
+      unique: true,
     },
     price: {
-        type: Number,
-        required: true // Bắt buộc
+      type: Number,
+      required: true,
     },
-    imageUrl: {
-        type: String, // Đường dẫn đến hình ảnh
-        required: true // Bắt buộc
+    description: {  
+      type: String,
+      required: true, 
     },
-    ingredients: [ingredientSchema] // Danh sách nguyên liệu
-});
+    categoryId: {
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'Category',
+      required: true,
+    },
+    ingredients: [
+      {
+        inventoryId: {
+          type: mongoose.Schema.Types.ObjectId, // Sử dụng ObjectId cho inventoryId
+          ref: 'Inventory',
+          required: true,
+        },
+        quantity: { type: Number, required: true }, // Chỉ lưu số lượng
+      },
+    ],
+    image: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
 
-const Product = mongoose.model('Product', productSchema);
-
-module.exports = Product;
+module.exports = mongoose.model('Product', productSchema);

@@ -1,0 +1,126 @@
+
+
+.detail-inventory-content {
+    flex: 1;
+    padding: 50px 20px 20px 20px;
+    background-color: #f9f9f9; 
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-left: 20px; 
+}
+
+.detail-inventory-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333; /* Màu chữ đậm */
+}
+
+.detail-inventory-info {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #fff; /* Nền trắng cho thông tin */
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.detail-inventory-item {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.detail-inventory-subtitle {
+    font-size: 20px;
+    font-weight: 500;
+    margin: 20px 0 10px;
+    color: #555; 
+    text-align: left;
+}
+
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    margin-bottom: 20px;
+}
+
+.filter-input_price {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex: 1; /* Chiếm toàn bộ không gian có sẵn */
+    margin-right: 10px; /* Khoảng cách giữa các ô input */
+    font-size: 16px;
+    -webkit-appearance: none; 
+    -moz-appearance: textfield; 
+}
+
+
+.filter-input_price::-webkit-inner-spin-button,
+.filter-input_price::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+.filter-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex: 1; /* Chiếm toàn bộ không gian có sẵn */
+    margin-right: 10px; /* Khoảng cách giữa các ô input */
+    font-size: 16px;
+}
+
+.filter-input:last-child {
+    margin-right: 0; /* Không cần margin cho ô cuối cùng */
+}
+
+.filter-button_inventory {
+    padding: 10px 15px;
+    background-color: #007bff; /* Nền nút lọc */
+    color: white; /* Màu chữ nút */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: relative;
+    top: -8px;
+}
+
+.filter-button_inventory:hover {
+    background-color: #0056b3; /* Màu khi hover */
+}
+
+.detail-inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.detail-inventory-table th,
+.detail-inventory-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.detail-inventory-table th {
+    background-color: rgb(76, 161, 175); /* Nền tiêu đề bảng */
+    color: white; /* Màu chữ tiêu đề bảng */
+}
+
+.back_btn_inventory {
+    position: absolute;
+    left: 300px;
+    top: 80px;
+    font-size: 24px; 
+    color: #007BFF; 
+    cursor: pointer; 
+    transition: color 0.3s; 
+}
+
+.back_btn_inventory:hover {
+    color: #0056b3; 
+}
+

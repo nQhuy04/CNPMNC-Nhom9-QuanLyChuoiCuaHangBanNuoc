@@ -1,130 +1,199 @@
 const express = require('express');
 const multer = require('multer');
-const path = require('path');
-const router = express.Router();
-const Product = require('../models/Product');
-const Ingredient = require('../models/Ingredient');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const mongoose = require('mongoose');
+const Product = require('../models/Product');
+const Category = require('../models/Category');
+const Inventory = require('../models/Inventory');
 
-const onProductAdded = () => {
-    console.log('Sản phẩm đã được thêm thành công!');
-};
-// Thiết lập lưu trữ cho multer
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/'); // Đường dẫn nơi lưu trữ file
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
-    }
+const router = express.Router();
+
+// Cấu hình Cloudinary
+cloudinary.config({
+    cloud_name: 'dem1hcy19',
+    api_key: '183398327458618',
+    api_secret: 'TJsV-ojOMo4Lyzk2fhD4BsQJn6I',
 });
 
-const upload = multer({ storage: storage });
+// Cấu hình Multer với Cloudinary
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'products',
+        allowed_formats: ['jpg', 'png', 'jpeg'],
+    },
+});
+const upload = multer({ storage });
 
-// Thêm sản phẩm mới
-router.post('/add', upload.single('image'), async (req, res) => {
-    const { name, description, price } = req.body;
-    const ingredients = JSON.parse(req.body['ingredients[]'] || '[]');
+const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
-    // Kiểm tra dữ liệu cần thiết
-    if (!name || !description || !price || !req.file) {
-        return res.status(400).json({ error: 'Vui lòng cung cấp tất cả thông tin sản phẩm.' });
-    }
+// Hàm kiểm tra Category và Inventory tồn tại
+const checkCategoryExists = async (categoryId) =>
+    isValidObjectId(categoryId) && (await Category.exists({ _id: categoryId }));
 
+const checkInventoryExists = async (inventoryId) =>
+    isValidObjectId(inventoryId) && (await Inventory.exists({ _id: inventoryId }));
+
+// Hàm parse JSON an toàn cho ingredients
+const parseIngredients = (ingredients) => {
     try {
-        const newProduct = new Product({
+        return typeof ingredients === 'string' ? JSON.parse(ingredients) : ingredients;
+    } catch (error) {
+        console.error('Invalid ingredients format:', error);
+        return [];
+    }
+};
+
+// Tạo sản phẩm mới
+router.post('/', upload.single('image'), async (req, res) => {
+    try {
+        const { name, price, description, categoryId, ingredients } = req.body; // Thêm description
+        const parsedIngredients = parseIngredients(ingredients);
+
+        if (!(await checkCategoryExists(categoryId))) {
+            return res.status(400).json({ error: `CategoryId ${categoryId} không tồn tại` });
+        }
+
+        for (const ingredient of parsedIngredients) {
+            if (!(await checkInventoryExists(ingredient.inventoryId))) {
+                return res.status(400).json({ error: `InventoryId ${ingredient.inventoryId} không tồn tại` });
+            }
+        }
+
+        const latestProduct = await Product.findOne({}, {}, { sort: { productId: -1 } });
+        const newProductId = latestProduct
+            ? `SP${(parseInt(latestProduct.productId.slice(2)) + 1).toString().padStart(3, '0')}`
+            : 'SP001';
+
+        const product = new Product({
+            productId: newProductId,
             name,
-            description,
             price,
-            imageUrl: req.file.path,
-            ingredients: ingredients.map(ing => ({
-                ingredient: ing.ingredient,
-                quantity: ing.quantity
-            }))
+            description, // Lưu description vào sản phẩm
+            categoryId,
+            ingredients: parsedIngredients,
+            image: req.file?.path || '',
         });
 
-        await newProduct.save();
-        res.status(201).json({ message: 'Sản phẩm đã được thêm thành công!' });
+        await product.save();
+        res.status(201).json({ message: 'Product created successfully!', product });
     } catch (error) {
-        console.error('Error adding product:', error);
-        res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm sản phẩm.' });
+        console.error('Error creating product:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
-
 
 // Lấy danh sách sản phẩm
 router.get('/', async (req, res) => {
     try {
-        const products = await Product.find();
-        res.send(products);
+        const products = await Product.find()
+            .populate('categoryId', 'name')
+            .populate('ingredients.inventoryId', 'name unit');
+
+        const response = products.map((product) => ({
+            ...product.toObject(),
+            ingredients: product.ingredients.map((ingredient) => ({
+                name: ingredient.inventoryId?.name || 'Không xác định',
+                unit: ingredient.inventoryId?.unit || 'Không xác định',
+                quantity: ingredient.quantity,
+            })),
+        }));
+
+        res.status(200).json(response);
     } catch (error) {
-        res.status(500).send({ message: 'Lỗi khi lấy danh sách sản phẩm.', error });
+        console.error('Error fetching products:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-// Lấy chi tiết sản phẩm theo ID
+// Lấy chi tiết sản phẩm theo productId
 router.get('/:id', async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id);
+        const product = await Product.findOne({ productId: req.params.id })
+            .populate('categoryId', 'name')
+            .populate('ingredients.inventoryId', 'name unit');
+
         if (!product) {
-            return res.status(404).send({ message: 'Sản phẩm không tồn tại.' });
+            return res.status(404).json({ message: 'Product not found' });
         }
-        res.send(product);
+
+        const response = {
+            ...product.toObject(),
+            ingredients: product.ingredients.map((ingredient) => ({
+                name: ingredient.inventoryId?.name || 'Không xác định',
+                unit: ingredient.inventoryId?.unit || 'Không xác định',
+                quantity: ingredient.quantity,
+            })),
+        };
+
+        res.status(200).json(response);
     } catch (error) {
-        res.status(500).send({ message: 'Lỗi khi lấy chi tiết sản phẩm.', error });
+        console.error('Error fetching product:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
 // Cập nhật sản phẩm
 router.put('/:id', upload.single('image'), async (req, res) => {
-    const { name, description, price } = req.body;
-    const ingredients = JSON.parse(req.body['ingredients'] || '[]');
-    
-    // Kiểm tra dữ liệu cần thiết
-    if (!name || !description || !price) {
-        return res.status(400).json({ error: 'Vui lòng cung cấp tất cả thông tin sản phẩm.' });
-    }
-
     try {
-        // Tìm sản phẩm và cập nhật
-        const updatedProduct = await Product.findById(req.params.id);
-        if (!updatedProduct) {
-            return res.status(404).send({ message: 'Sản phẩm không tồn tại.' });
+        const { name, price, description, categoryId, ingredients } = req.body; // Thêm description
+        const parsedIngredients = parseIngredients(ingredients);
+
+        const product = await Product.findOne({ productId: req.params.id });
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
         }
 
-        // Cập nhật thông tin
-        updatedProduct.name = name;
-        updatedProduct.description = description;
-        updatedProduct.price = price;
-        updatedProduct.ingredients = ingredients.map(ing => ({
-            ingredient: ing.ingredient,
-            quantity: ing.quantity
-        }));
-        
-        // Cập nhật ảnh nếu có
+        if (categoryId && !(await checkCategoryExists(categoryId))) {
+            return res.status(400).json({ error: `CategoryId ${categoryId} không tồn tại` });
+        }
+
+        for (const ingredient of parsedIngredients) {
+            if (!(await checkInventoryExists(ingredient.inventoryId))) {
+                return res.status(400).json({ error: `InventoryId ${ingredient.inventoryId} không tồn tại` });
+            }
+        }
+
         if (req.file) {
-            updatedProduct.imageUrl = req.file.path;
+            const publicId = product.image.split('/').pop().split('.')[0];
+            await cloudinary.uploader.destroy(`products/${publicId}`);
+            product.image = req.file.path;
         }
 
-        await updatedProduct.save();
-        res.send({ message: 'Sản phẩm đã được cập nhật thành công!', product: updatedProduct });
+        // Cập nhật các trường
+        product.name = name;
+        product.price = price;
+        product.description = description; // Cập nhật description
+        product.categoryId = categoryId;
+        product.ingredients = parsedIngredients;
+
+        await product.save();
+        res.status(200).json({ message: 'Product updated successfully!', product });
     } catch (error) {
-        res.status(500).send({ message: 'Lỗi khi cập nhật sản phẩm.', error });
+        console.error('Error updating product:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
 
 // Xóa sản phẩm
 router.delete('/:id', async (req, res) => {
     try {
-        const product = await Product.findByIdAndDelete(req.params.id);
+        const product = await Product.findOneAndDelete({ productId: req.params.id });
+
         if (!product) {
-            return res.status(404).send({ message: 'Sản phẩm không tồn tại.' });
+            return res.status(404).json({ message: 'Product not found' });
         }
-        res.send({ message: 'Sản phẩm đã được xóa.', product });
+
+        if (product.image) {
+            const publicId = product.image.split('/').pop().split('.')[0];
+            await cloudinary.uploader.destroy(`products/${publicId}`);
+        }
+
+        res.status(200).json({ message: 'Product deleted successfully!' });
     } catch (error) {
-        res.status(500).send({ message: 'Lỗi khi xóa sản phẩm.', error });
+        console.error('Error deleting product:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 

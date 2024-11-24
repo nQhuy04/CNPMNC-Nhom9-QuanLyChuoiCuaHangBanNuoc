@@ -1,0 +1,123 @@
+
+  
+  /* Nội dung chính */
+  .best-selling-report {
+    margin-left: 20px;  
+    padding: 40px;
+    background-color: #fff;
+    flex-grow: 1;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+  
+  /* Tiêu đề báo cáo */
+  .title {
+    font-size: 32px;
+    color: #2d3e50;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 10px;
+  }
+  
+  /* Nút Quay lại */
+  .back-btn {
+    font-size: 24px;
+    color: #3498db;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: color 0.3s ease;
+  }
+  
+  .back-btn:hover {
+    color: #2980b9;
+  }
+  
+  /* Thanh tìm kiếm */
+  .search-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .search-bar input {
+    width: 70%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .search-bar input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
+  }
+  
+  /* Bảng dữ liệu sản phẩm */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+  }
+  
+  th, td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 2px solid #ddd;
+    font-size: 16px;
+  }
+  
+  th {
+    background-color: #3498db;
+    color: white;
+    font-weight: bold;
+  }
+  
+  tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+  }
+  
+  tbody tr td {
+    border-bottom: 1px solid #eee;
+  }
+  
+  td {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  /* Responsive thiết kế */
+  @media (max-width: 768px) {
+    .container_div {
+      flex-direction: column;
+    }
+  
+    .best-selling-report {
+      margin-left: 0;
+      padding: 20px;
+    }
+  
+    .search-bar input {
+      width: 90%;
+    }
+  
+    table {
+      font-size: 14px;
+    }
+  
+    th, td {
+      padding: 10px;
+    }
+  }
+  

@@ -1,88 +1,65 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import SidebarNav from '../SidebarNav/SidebarNav';
 import axios from 'axios';
-import './DetailProduct.css';
+import { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import SidebarNav from '../SidebarNav/SidebarNav'; // Import SidebarNav
+import './DetailProduct.css'; // Import file CSS
 
 const DetailProduct = () => {
-    const { id } = useParams(); // Lấy id từ URL
-    const [product, setProduct] = useState(null);
-    const navigate = useNavigate(); // Điều hướng quay lại danh sách sản phẩm
+  const { id } = useParams(); // Lấy ID sản phẩm từ URL
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-    const fetchProductDetail = useCallback(async () => {
-        try {
-            const response = await axios.get(`http://localhost:8000/api/products/${id}`);
-            setProduct(response.data);
-        } catch (error) {
-            console.error('Lỗi khi lấy chi tiết sản phẩm:', error);
-        }
-    }, [id]);
-
-    const handleDelete = async () => {
-        if (window.confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?')) {
-            try {
-                await axios.delete(`http://localhost:8000/api/products/${id}`);
-                alert('Sản phẩm đã được xóa thành công.');
-                navigate('/ProductManagement'); 
-            } catch (error) {
-                console.error('Lỗi khi xóa sản phẩm:', error);
-                alert('Có lỗi xảy ra khi xóa sản phẩm.');
-            }
-        }
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/v1/products/${id}`);
+        setProduct(response.data);
+      } catch (error) {
+        setError('Lỗi khi tải thông tin sản phẩm.');
+      } finally {
+        setLoading(false);
+      }
     };
 
-    useEffect(() => {
-        fetchProductDetail();
-    }, [fetchProductDetail]);
+    fetchProduct();
+  }, [id]);
 
-    if (!product) return <p>Đang tải thông tin sản phẩm...</p>;
+  if (loading) return <div className="loading">Loading...</div>;
+  if (error) return <div className="error">{error}</div>;
 
-    return (
-        <div className="container_div">
-            <SidebarNav />
-            <div className="product-detail-container">
-                <h1 className="product-title">Chi Tiết Sản Phẩm</h1>
-                <div className="product-image-container">
-                    <img
-                        className="product-image"
-                        src={`http://localhost:8000/${product.imageUrl}`} 
-                        alt={product.name}
-                    />
-                </div>
-                <div className="product-info">
-                    <h2 className="product-name">{product.name}</h2>
-                    <p className="product-description"><strong>Mô tả:</strong> {product.description}</p>
-                    <p className="product-price"><strong>Giá:</strong> {new Intl.NumberFormat().format(product.price)} VND</p>
-    
-                    <h3 className="ingredients-title">Nguyên liệu:</h3>
-                    {product.ingredients && product.ingredients.length > 0 ? (
-                        <ul className="ingredients-list">
-                            {product.ingredients.map((ingredient, index) => (
-                                <li key={index} className="ingredient-item">
-                                    {ingredient.ingredient}: <strong>{ingredient.quantity}</strong>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p className="no-ingredients">Không có nguyên liệu.</p>
-                    )}
-    
-                    <div className="button-group">
-                        <button className="back-button_details" onClick={() => navigate(-1)}>
-                            Quay lại
-                        </button>
-                        <button className="edit-button" onClick={() => navigate(`/edit-product/${id}`)}>
-                            Sửa
-                        </button>
-                        <button className="delete-button" onClick={handleDelete}>
-                            Xóa
-                        </button>
-                    </div>
-                </div>
-            </div>
+  // Kiểm tra nếu product không có dữ liệu
+  if (!product) return <div className="error">Không tìm thấy sản phẩm.</div>;
+
+  return (
+    <div className="container_div">
+      <SidebarNav />
+      <div className="product-detail">
+        <h1 className="product-title">{product.name}</h1>
+        <div className="product-content">
+          <img src={product.image} alt={product.name} className="product-image" />
+          <div className="product-info">
+            <p><strong>ID:</strong> {product.productId}</p>
+            <p><strong>Giá:</strong> {product.price.toLocaleString()} VND</p>
+            <p><strong>Mô Tả:</strong> {product.description || 'Không có mô tả.'}</p>
+            <p><strong>Danh Mục:</strong> {product.categoryId ? product.categoryId.name : 'Không xác định'}</p>
+
+            <h3>Nguyên Liệu:</h3>
+            <ul className="ingredient-list">
+              {product.ingredients.map((ingredient, index) => (
+                <li key={index} className="ingredient-item">
+                  <strong>{ingredient.name || 'Không xác định'}</strong>: 
+                  {ingredient.quantity} {ingredient.unit || 'Không xác định'}
+                </li>
+              ))}
+            </ul>
+
+            <Link to="/product" className="back-button">Quay Lại</Link>
+          </div>
         </div>
-    );
-}
-    
+      </div>
+    </div>
+  );
+};
 
 export default DetailProduct;

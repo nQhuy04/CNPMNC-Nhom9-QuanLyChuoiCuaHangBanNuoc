@@ -13,7 +13,6 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
     setErrors({}); // Reset lỗi trước khi gửi yêu cầu
 
     const newUser = {
@@ -23,30 +22,34 @@ const Login = () => {
 
     try {
       const user = await loginUser(newUser, dispatch, navigate);
+
       // Phân quyền
       if (user.isAdmin) {
-        navigate("/dashboard"); // Điều hướng đến dashboard nếu là admin
+        navigate("/dashboard");
       } else {
-        navigate("/home"); // Điều hướng đến home nếu không phải admin
+        navigate("/home");
       }
     } catch (error) {
-      // Kiểm tra lỗi và phân loại lỗi
       const errorMessage = error.response?.data || error.message || "Lỗi không xác định. Vui lòng thử lại.";
 
-      // Đặt lỗi cho từng trường nếu có
       const newErrors = {};
 
+      // Nếu có lỗi tên đăng nhập
       if (errorMessage.username) {
-        newErrors.username = errorMessage.username; // Lỗi username
-      }
-      if (errorMessage.password) {
-        newErrors.password = errorMessage.password; // Lỗi password
-      }
-      if (!errorMessage.username && !errorMessage.password) {
-        newErrors.general = errorMessage; // Lỗi chung
+        newErrors.username = errorMessage.username;
       }
 
-      setErrors(newErrors); // Cập nhật lỗi mới vào state
+      // Nếu có lỗi mật khẩu
+      if (errorMessage.password) {
+        newErrors.password = errorMessage.password;
+      }
+
+      // Nếu có lỗi chung
+      if (!errorMessage.username && !errorMessage.password) {
+        newErrors.general = errorMessage;
+      }
+
+      setErrors(newErrors); // Cập nhật lỗi vào state
     }
   };
 
@@ -54,26 +57,24 @@ const Login = () => {
     <section className="login-container">
       <div className="login-title">Đăng Nhập</div>
       <form onSubmit={handleLogin}>
-        {/* Tên đăng nhập */}
         <label className="login_name_label">Tên đăng nhập</label>
         <input
           type="text"
           placeholder="Nhập tên đăng nhập"
-          value={username} // Thêm value để liên kết với state
+          value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-        {/* Hiển thị lỗi cho username nếu có */}
+        {/* Hiển thị lỗi dưới input username nếu có */}
         {errors.username && <p className="login-err">{errors.username}</p>}
 
-        {/* Mật khẩu */}
         <label className="login_pass_label">Mật khẩu</label>
         <input
           type="password"
           placeholder="Nhập mật khẩu"
-          value={password} // Thêm value để liên kết với state
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        {/* Hiển thị lỗi cho password nếu có */}
+        {/* Hiển thị lỗi dưới input mật khẩu nếu có */}
         {errors.password && <p className="login-err">{errors.password}</p>}
 
         <button type="submit">Đăng nhập</button>

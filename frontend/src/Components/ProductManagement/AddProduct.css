@@ -1,120 +1,135 @@
-/* Tối ưu giao diện cho form */
-.add-product-form {
-    width: 800px;
-    margin: 40px auto;
+.add-product-container {
     padding: 20px;
-    background-color: #f8f9fa; /* Màu nền nhạt */
-    border-radius: 8px; /* Bo tròn góc */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
-}
-
-/* Tiêu đề */
-.add-product-form h2 {
-    text-align: center;
-    color: #343a40; /* Màu tối cho tiêu đề */
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: calc(100vh - 40px);
+    overflow-y: auto;
+    width: calc(100% - 240px);
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .add-product-header {
     margin-bottom: 20px;
-}
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .input-field,
+  .textarea-field,
+  .file-input,
+  .ingredient-select,
+  .ingredient-quantity {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
 
-/* Các nhóm trường nhập liệu */
-.form-group {
-    margin-bottom: 15px; /* Khoảng cách giữa các trường */
-}
-
-/* Nhãn của các trường */
-.form-label {
-    display: block; /* Để nhãn trên cùng */
-    font-weight: bold; /* Làm cho nhãn đậm */
-    margin-bottom: 5px; /* Khoảng cách dưới nhãn */
-}
-
-/* Trường nhập liệu */
-.form-input, .form-textarea, .form-select {
-    width: 100%; /* Chiều rộng đầy đủ */
-    padding: 10px; /* Padding cho cảm giác thoải mái */
-    border: 1px solid #ced4da; /* Đường viền xám nhạt */
-    border-radius: 4px; /* Bo tròn góc */
-    font-size: 16px; /* Kích thước chữ */
-    box-sizing: border-box; /* Đảm bảo padding không làm tăng chiều rộng */
-    transition: border-color 0.3s; /* Hiệu ứng chuyển tiếp */
-}
-
-/* Trường textarea */
-.form-textarea {
-    height: 100px; /* Chiều cao cho textarea */
-}
-
-/* Hiệu ứng hover cho trường nhập liệu */
-.form-input:focus, .form-textarea:focus, .form-select:focus {
-    border-color: #80bdff; /* Màu viền khi focus */
-    outline: none; /* Bỏ outline */
-}
-
-/* Nút bấm thêm nguyên liệu */
-.btn-add {
-    background-color: #28a745; /* Màu xanh lá */
-    color: white; /* Màu chữ trắng */
-    padding: 10px 15px; /* Padding cho nút */
-    border: none; /* Không có đường viền */
-    border-radius: 4px; /* Bo tròn góc */
-    cursor: pointer; /* Con trỏ cho thấy đây là nút bấm */
-    transition: background-color 0.3s; /* Hiệu ứng chuyển tiếp */
-}
-
-/* Hiệu ứng hover cho nút bấm thêm nguyên liệu */
-.btn-add:hover {
-    background-color: #218838; /* Màu xanh đậm khi hover */
-}
-
-/* Danh sách nguyên liệu đã thêm */
-.added-ingredients {
-    margin-top: 20px; /* Khoảng cách trên */
-}
-
-/* Mỗi nguyên liệu trong danh sách */
-.ingredient-item {
-    display: flex; /* Sử dụng flexbox cho linh hoạt */
-    justify-content: space-between; /* Khoảng cách giữa nguyên liệu và nút xóa */
-    padding: 5px 0; /* Padding cho nguyên liệu */
-}
-
-/* Nút xóa nguyên liệu */
-.btn-remove {
-    background-color: #dc3545; /* Màu đỏ cho nút xóa */
-    color: white; /* Màu chữ trắng */
-    border: none; /* Không có đường viền */
-    border-radius: 4px; /* Bo tròn góc */
-    cursor: pointer; /* Con trỏ cho thấy đây là nút bấm */
-}
-
-/* Hiệu ứng hover cho nút xóa */
-.btn-remove:hover {
-    background-color: #c82333; /* Màu đỏ đậm khi hover */
-}
-
-/* Nút submit */
-.btn-submit {
-    background-color: #007bff; /* Màu xanh dương */
-    color: white; /* Màu chữ trắng */
-    padding: 10px 20px; /* Padding cho nút */
-    border: none; /* Không có đường viền */
-    border-radius: 4px; /* Bo tròn góc */
-    cursor: pointer; /* Con trỏ cho thấy đây là nút bấm */
-    transition: background-color 0.3s; /* Hiệu ứng chuyển tiếp */
-    width: 100%; /* Chiều rộng đầy đủ */
-}
-
-/* Hiệu ứng hover cho nút submit */
-.btn-submit:hover {
-    background-color: #0069d9; /* Màu xanh dương đậm khi hover */
-}
-
-.back-btn_product{
-    color:#0069d9;
-    position: absolute;
-    font-size: 30px;
-}
-
-.back-btn_product:hover {
-    color: #11263d;
+  .ingredient-quantity {
+    margin-top: 20px
+  }
+  
+  .textarea-field {
+    height: 120px;
+  }
+  
+  .ingredient-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 100%;
+    gap: 10px;
+  }
+  
+  .submit-button,
+  .back-button,
+  .remove-ingredient-button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
     cursor: pointer;
-}
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .add-ingredient-button{
+    width: 200px;
+    background-color: green;
+  }
+
+  .remove-ingredient-button {
+    margin-top: 2px;
+  }
+  
+  .remove-ingredient-button {
+    background-color: #ff4d4d;
+    margin-left: 10px;
+  }
+  
+  .error-message {
+    color: red;
+    margin-bottom: 10px;
+  }
+  
+  .success-message {
+    color: green;
+    margin-bottom: 10px;
+  }
+  
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .back_btn_AddProduct{
+    position: relative;
+    left: 0;
+    font-size: 24px;
+    width: 50px;
+    padding: 10px;
+    color: #007BFF ;
+  }
+
+  .submit-button-addproduct{
+    width: auto;
+    background-color: darkgreen;
+  }
+
+  .submit-button-addproduct:hover{
+    background-color: green;
+  }
+
+  .back_btn_AddProduct:hover{
+    cursor: pointer;
+    color: #0056b3;
+  }
+
+  .error-message-product {
+    color: red; 
+    background-color: #ffe6e6; 
+    border: 1px solid red; 
+    padding: 10px;
+    margin: 10px 0; 
+    border-radius: 5px; 
+    font-weight: bold; 
+  }
+  
+  
+  @media (min-width: 768px) {
+    .button-group {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+  

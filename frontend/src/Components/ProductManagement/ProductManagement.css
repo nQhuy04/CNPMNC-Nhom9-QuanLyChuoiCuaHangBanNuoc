@@ -1,151 +1,208 @@
-.product-management {
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+/* Đồng bộ hóa thiết kế */
+.product-management-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100vh;
+}
+
+.product-management-content {
+    flex: 1;
+    padding: 30px;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin: 20px;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
+    overflow: auto;
 }
 
-.product-management__title {
-    font-size: 24px;
+.product-management-title {
+    text-align: center;
     margin-bottom: 20px;
+    font-size: 2rem;
     color: #333;
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 
-.product-management__subtitle {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: #666;
-}
-
-.product-management__add-button {
-    margin-bottom: 20px;
-    padding: 10px 15px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    align-self: flex-start;
-}
-
-.product-management__add-button:hover {
-    background-color: #45a049;
-}
-
-.product-management__table-container {
-    overflow-x: auto;
-    flex: 1;
-}
-
-.product-management__table {
+.product-table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng cho bảng */
+    border-radius: 8px;
+    background-color: white;
 }
 
-.product-management__table-header {
+.product-thead th {
     background-color: rgb(76, 161, 175);
     color: white;
-    padding: 12px;
+    padding: 16px;
     text-align: left;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 2px solid #ddd;
+    vertical-align: middle; /* Căn giữa cho tiêu đề */
 }
 
-.product-management__table-row {
-    border-bottom: 1px solid #ddd;
+.product-tbody .product-row {
+    border-bottom: 1px solid #eee;
 }
 
-.product-management__table-cell {
-    max-width: 300px;
-    padding: 12px;
-    color: #333;
-    vertical-align: middle;
-    text-align: justify;
+.product-tbody .product-row:nth-child(even) {
+    background-color: #f9f9f9;
 }
 
-.product-management__description-cell {
-    max-width: 300px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.product-tbody .product-row:hover {
+    background-color: #e9ecef;
+    transition: background-color 0.3s;
 }
 
-.product-management__item-image {
-    width: 100px;
-    height: auto;
-    border-radius: 5px;
+.product-tbody td {
+    padding: 12px 16px; /* Thêm padding cho các cell */
+    text-align: left; /* Căn trái cho các nội dung */
+    vertical-align: middle; /* Căn giữa cho nội dung */
 }
 
-.product-management__edit-button,
-.product-management__delete-button,
-.product-management__view-button {
-    padding: 6px 10px;
+.product-action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.product-detail-button,
+.product-edit-button,
+.product-delete-button {
+    padding: 10px 15px;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
     transition: background-color 0.3s, transform 0.2s;
-    margin-right: 10px;
 }
 
-.product-management__edit-button {
-    background-color: #007bff;
-    color: white;
+.product-detail-button {
+    background-color: #17a2b8;
 }
 
-.product-management__delete-button {
-    background-color: #dc3545;
-    color: white;
-}
-
-.product-management__view-button {
-    background-color: #ffc107;
-    color: white;
-}
-
-.product-management__edit-button:hover,
-.product-management__delete-button:hover,
-.product-management__view-button:hover {
+.product-detail-button:hover {
+    background-color: #138496;
     transform: scale(1.05);
-    opacity: 0.9;
 }
 
-.product-management__pagination {
+.product-edit-button {
+    background-color: #ffc107;
+}
+
+.product-edit-button:hover {
+    background-color: #e0a800;
+    transform: scale(1.05);
+}
+
+.product-delete-button {
+    background-color: #dc3545;
+}
+
+.product-delete-button:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+}
+
+.product-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.product-add-button {
+    padding: 14px 24px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.product-add-button:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.product-search-input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    width: 300px;
+    transition: border-color 0.3s;
+}
+
+.product-search-input:focus {
+    border-color: #28a745;
+    outline: none;
+}
+
+.pagination {
     display: flex;
     justify-content: center;
     margin-top: 20px;
 }
 
-.product-management__pagination-button {
+.pagination-button {
+    padding: 12px 18px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
     margin: 0 5px;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    background-color: #ff5722;
-    color: white;
+    background-color: white;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
-    font-weight: bold;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
-.product-management__pagination-button:hover {
-    background-color: #e64a19;
+.pagination-button:hover {
+    background-color: #f1f1f1;
     transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.product-management__pagination-button:disabled {
-    background-color: #d6d6d6;
-    cursor: not-allowed;
+.pagination-button.active {
+    background-color: rgb(76, 161, 175);
+    color: white;
+    border-color: rgb(76, 161, 175);
 }
 
-.product-management__pagination-button--active {
-    background-color: #007bff;
-    border: 2px solid #ffffff;
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+.product-image {
+    width: 150px; 
+    height: auto;
+    border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+    .product-management-content {
+        margin: 10px;
+    }
+
+    .product-action-buttons {
+        flex-direction: column;
+    }
+
+    .product-search-input {
+        width: 100%;
+    }
+
+    .product-add-button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .pagination-button {
+        width: 100%;
+        margin: 5px 0;
+    }
 }
