@@ -7,25 +7,46 @@ import { useDispatch } from "react-redux";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+
+    setErrors({}); // Reset lỗi trước khi gửi yêu cầu
+
     const newUser = {
       username,
       password,
     };
+
     try {
-      loginUser(newUser, dispatch, navigate);
-    } catch (error) {
-      if (error.response) {
-        // Display the error message coming from the controller
-        setMessage(error.response.data.message || "Đã xảy ra lỗi khi đăng nhập.");
+      const user = await loginUser(newUser, dispatch, navigate);
+      // Phân quyền
+      if (user.isAdmin) {
+        navigate("/dashboard"); // Điều hướng đến dashboard nếu là admin
       } else {
-        setMessage("Lỗi kết nối đến máy chủ.");
+        navigate("/home"); // Điều hướng đến home nếu không phải admin
       }
+    } catch (error) {
+      // Kiểm tra lỗi và phân loại lỗi
+      const errorMessage = error.response?.data || error.message || "Lỗi không xác định. Vui lòng thử lại.";
+
+      // Đặt lỗi cho từng trường nếu có
+      const newErrors = {};
+
+      if (errorMessage.username) {
+        newErrors.username = errorMessage.username; // Lỗi username
+      }
+      if (errorMessage.password) {
+        newErrors.password = errorMessage.password; // Lỗi password
+      }
+      if (!errorMessage.username && !errorMessage.password) {
+        newErrors.general = errorMessage; // Lỗi chung
+      }
+
+      setErrors(newErrors); // Cập nhật lỗi mới vào state
     }
   };
 
@@ -33,21 +54,33 @@ const Login = () => {
     <section className="login-container">
       <div className="login-title">Đăng Nhập</div>
       <form onSubmit={handleLogin}>
+        {/* Tên đăng nhập */}
         <label className="login_name_label">Tên đăng nhập</label>
         <input
           type="text"
           placeholder="Nhập tên đăng nhập"
+          value={username} // Thêm value để liên kết với state
           onChange={(e) => setUsername(e.target.value)}
         />
+        {/* Hiển thị lỗi cho username nếu có */}
+        {errors.username && <p className="login-err">{errors.username}</p>}
+
+        {/* Mật khẩu */}
         <label className="login_pass_label">Mật khẩu</label>
         <input
           type="password"
           placeholder="Nhập mật khẩu"
+          value={password} // Thêm value để liên kết với state
           onChange={(e) => setPassword(e.target.value)}
         />
+        {/* Hiển thị lỗi cho password nếu có */}
+        {errors.password && <p className="login-err">{errors.password}</p>}
+
         <button type="submit">Đăng nhập</button>
+
+        {/* Hiển thị lỗi chung nếu có */}
+        {errors.general && <p className="login-err">{errors.general}</p>}
       </form>
-      {message && <p className="login-err">{message}</p>}
       <div className="login-register">
         Chưa có tài khoản?{" "}
         <Link className="login-register-link" to="/register">

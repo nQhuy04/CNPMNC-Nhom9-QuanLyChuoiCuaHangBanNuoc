@@ -14,6 +14,7 @@ import OrderDetail from "./Components/OrderManagement/OrderDetail";
 import IngredientManagement from "./Components/IngredientManagement/IngredientManagement";
 import AddIngredient from "./Components/IngredientManagement/AddIngredient";
 import EditIngredient from "./Components/IngredientManagement/EditIngredient"; 
+import Home from "./Components/Home/home";
 
 
 
@@ -23,7 +24,8 @@ function App() {
       <NavBar />
       <div className="App"> 
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           {/* Route Quản lý người dùng */}
           <Route path="/usermanagement" element={<UserManagement />} />
   
