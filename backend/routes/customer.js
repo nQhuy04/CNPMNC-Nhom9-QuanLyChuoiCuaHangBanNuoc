@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Customer = require("../models/Customer");
+const Order = require("../models/Order");
 const mongoose = require("mongoose");
 
 // Hàm tạo idCustomer tự động theo định dạng KH001, KH002, ...
@@ -120,21 +121,40 @@ router.put("/:id", async (req, res) => {
     }
 });
 
-// 5. Xóa khách hàng
 router.delete("/:id", async (req, res) => {
     try {
-        const { id } = req.params;
+        const { id } = req.params;  // `id` là `idCustomer` của khách hàng
 
-        const deletedCustomer = await Customer.findOneAndDelete({ idCustomer: id });
-        
-        if (!deletedCustomer) {
-            return res.status(404).json({ message: "Khách hàng không tồn tại" });
+        // Kiểm tra xem khách hàng có đơn hàng nào không, sử dụng idCustomer trong bảng Order
+        const orders = await Order.find({ customerId: id });
+
+        if (orders.length > 0) {
+            return res.status(400).json({ 
+                message: "Không thể xóa khách hàng vì họ có đơn hàng liên quan." 
+            });
         }
 
-        res.status(200).json({ message: "Khách hàng đã được xóa thành công" });
+        // Tiến hành xóa khách hàng nếu không có đơn hàng
+        const deletedCustomer = await Customer.findOneAndDelete({ idCustomer: id });  // Tìm và xóa bằng idCustomer
+        
+        if (!deletedCustomer) {
+            return res.status(404).json({ 
+                message: "Khách hàng không tồn tại." 
+            });
+        }
+
+        res.status(200).json({ 
+            message: "Khách hàng đã được xóa thành công." 
+        });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ 
+            message: `Đã xảy ra lỗi: ${error.message}` 
+        });
     }
 });
+
+
+
+
 
 module.exports = router;

@@ -121,8 +121,8 @@ router.get("/top-customers", async (req, res) => {
 
     // Tính tổng chi tiêu cho từng khách hàng
     const customersWithTotalSpend = await Promise.all(customers.map(async (customer) => {
-      // Lấy tất cả đơn hàng của khách hàng
-      const orders = await Order.find({ customerId: customer._id });
+      // Lấy tất cả đơn hàng của khách hàng dựa trên idCustomer
+      const orders = await Order.find({ customerId: customer.idCustomer });
 
       // Tính tổng chi tiêu của khách hàng từ các đơn hàng
       const totalSpend = orders.reduce((sum, order) => sum + order.totalAmount, 0);
@@ -146,6 +146,7 @@ router.get("/top-customers", async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
 
 
 module.exports = router;

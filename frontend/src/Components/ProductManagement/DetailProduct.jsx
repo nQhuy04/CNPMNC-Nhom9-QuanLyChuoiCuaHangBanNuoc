@@ -10,6 +10,7 @@ const DetailProduct = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  // Fetch thông tin sản phẩm
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -46,12 +47,16 @@ const DetailProduct = () => {
 
             <h3>Nguyên Liệu:</h3>
             <ul className="ingredient-list">
-              {product.ingredients.map((ingredient, index) => (
-                <li key={index} className="ingredient-item">
-                  <strong>{ingredient.name || 'Không xác định'}</strong>: 
-                  {ingredient.quantity} {ingredient.unit || 'Không xác định'}
-                </li>
-              ))}
+              {product.ingredients && product.ingredients.length > 0 ? (
+                product.ingredients.map((ingredient, index) => (
+                  <li key={index} className="ingredient-item">
+                    <strong>{ingredient.name || 'Không xác định'}</strong>: 
+                    {ingredient.quantity} {ingredient.unit || 'Không xác định'}
+                  </li>
+                ))
+              ) : (
+                <li>Không có nguyên liệu được xác định.</li>
+              )}
             </ul>
 
             <Link to="/product" className="back-button">Quay Lại</Link>

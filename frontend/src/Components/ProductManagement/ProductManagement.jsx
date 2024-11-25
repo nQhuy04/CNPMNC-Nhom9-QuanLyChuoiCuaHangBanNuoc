@@ -48,14 +48,16 @@ const ProductManagement = () => {
           showToast('Lỗi khi xóa sản phẩm.', 'error');
         }
       } catch (error) {
-        console.error('Error deleting product:', error);
-        showToast('Lỗi khi xóa sản phẩm.', 'error');
+        // Kiểm tra lỗi từ phản hồi server
+        const errorMessage = error.response?.data?.message || 'Lỗi khi xóa sản phẩm.';
+        showToast(errorMessage, 'error');
       } finally {
         setShowConfirmDialog(false);
         setProductIdToDelete(null);
       }
     }
   };
+  
 
   const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())

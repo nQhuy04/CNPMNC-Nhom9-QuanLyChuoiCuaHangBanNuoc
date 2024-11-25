@@ -1,15 +1,16 @@
 import React from 'react';
 import './sidebarnav.css';
-import { Link } from 'react-router-dom';
-import { FiHome, FiUsers, FiBox, FiShoppingCart, FiPackage, FiDatabase, FiBarChart2 } from 'react-icons/fi';
+import { NavLink } from 'react-router-dom'; // Thay Link bằng NavLink để hỗ trợ active
+import { FiHome, FiUser, FiUserPlus, FiBox, FiShoppingCart, FiPackage, FiDatabase, FiBarChart2 } from 'react-icons/fi';
 
 const SidebarNav = () => {
   const menuItems = [
     { icon: <FiHome />, text: 'Bảng điều khiển', path: '/' },
-    { icon: <FiUsers />, text: 'Quản Lý Người Dùng', path: '/usermanagement' },
+    { icon: <FiUser />, text: 'Quản Lý Tài Khoản', path: '/usermanagement' },
+    { icon: <FiUserPlus />, text: 'Quản lý khách hàng', path: '/customer' },
+    { icon: <FiPackage />, text: 'Quản lý danh mục', path: '/category' },
     { icon: <FiBox />, text: 'Quản lý sản phẩm', path: '/product' },
     { icon: <FiShoppingCart />, text: 'Quản lý đơn hàng', path: '/order' },
-    { icon: <FiPackage />, text: 'Quản lý danh mục', path: '/category' },
     { icon: <FiDatabase />, text: 'Quản lý kho', path: '/inventory' },
     { icon: <FiBarChart2 />, text: 'Báo cáo', path: '/report' },
   ];
@@ -19,10 +20,14 @@ const SidebarNav = () => {
       <ul>
         {menuItems.map((item, index) => (
           <li key={index}>
-            <Link to={item.path}>
+            <NavLink
+              to={item.path}
+              activeClassName="active"  
+              exact
+            >
               {item.icon}
               <span>{item.text}</span>
-            </Link>
+            </NavLink>
           </li>
         ))}
       </ul>

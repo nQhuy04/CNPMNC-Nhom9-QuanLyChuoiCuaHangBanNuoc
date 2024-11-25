@@ -28,11 +28,19 @@ const productSchema = new mongoose.Schema(
     ingredients: [
       {
         inventoryId: {
-          type: mongoose.Schema.Types.ObjectId, // Sử dụng ObjectId cho inventoryId
+          type: mongoose.Schema.Types.ObjectId, 
           ref: 'Inventory',
           required: true,
         },
-        quantity: { type: Number, required: true }, // Chỉ lưu số lượng
+        quantity: { 
+          type: Number, 
+          required: true 
+        }, // Lượng nguyên liệu cần dùng trong sản phẩm (ví dụ 50g, 100ml)
+        unit: { 
+          type: String, 
+          required: true, 
+          enum: ['g', 'ml'] // Đơn vị nguyên liệu trong sản phẩm (g, ml)
+        }
       },
     ],
     image: {

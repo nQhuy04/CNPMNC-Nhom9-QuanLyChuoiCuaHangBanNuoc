@@ -27,16 +27,16 @@ const EditProduct = () => {
                 const productResponse = await axios.get(`http://localhost:8000/v1/products/${id}`);
                 const categoriesResponse = await axios.get('http://localhost:8000/v1/categories');
                 const ingredientsResponse = await axios.get('http://localhost:8000/v1/inventory');
-        
+
                 setProductName(productResponse.data.name);
                 setPrice(productResponse.data.price);
                 setDescription(productResponse.data.description);
                 setCategoryId(productResponse.data.categoryId._id);
                 setImageName(productResponse.data.image.split('/').pop());
-    
+
                 setAvailableIngredients(ingredientsResponse.data);
                 setCategories(categoriesResponse.data);
-    
+
                 const loadedIngredients = productResponse.data.ingredients.map(ing => {
                     const matchingIngredient = ingredientsResponse.data.find(
                         availableIng => availableIng.name === ing.name
@@ -47,11 +47,10 @@ const EditProduct = () => {
                         quantity: ing.quantity
                     };
                 });
-    
+
                 setIngredients(loadedIngredients);
-                console.log("Ingredients from API:", productResponse.data.ingredients); 
-                console.log("Loaded Ingredients:", loadedIngredients); 
-    
+                console.log("Ingredients from API:", productResponse.data.ingredients);
+                console.log("Loaded Ingredients:", loadedIngredients);
             } catch (error) {
                 setError('Lỗi khi tải dữ liệu sản phẩm hoặc danh mục.');
                 console.error("Fetch Data Error:", error);
@@ -63,17 +62,27 @@ const EditProduct = () => {
     const handleIngredientChange = (index, value) => {
         const newIngredients = [...ingredients];
         const selectedIngredient = availableIngredients.find(ing => ing._id === value);
-        newIngredients[index].id = value;
-        newIngredients[index].unit = selectedIngredient ? selectedIngredient.unit : ''; 
+        
+        if (selectedIngredient) {
+          newIngredients[index].id = value;
+          if (selectedIngredient.unit === 'kg') {
+            newIngredients[index].unit = 'g';  // Chuyển đổi từ kg sang g
+            newIngredients[index].quantity *= 1000; // Chuyển đổi số lượng từ kg sang g
+          } else if (selectedIngredient.unit === 'l') {
+            newIngredients[index].unit = 'ml';  // Chuyển đổi từ lít sang ml
+            newIngredients[index].quantity *= 1000; // Chuyển đổi số lượng từ lít sang ml
+          } else {
+            newIngredients[index].unit = selectedIngredient.unit;
+          }
+        }
         setIngredients(newIngredients);
-        console.log("Updated Ingredients:", newIngredients);
-    };
+      };
+      
 
     const handleQuantityChange = (index, value) => {
         const newIngredients = [...ingredients];
         newIngredients[index].quantity = value;
         setIngredients(newIngredients);
-        console.log("Updated Ingredients with Quantity:", newIngredients);
     };
 
     const addIngredient = () => {
@@ -92,23 +101,24 @@ const EditProduct = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const productNameRegex = /^[\p{L}\p{M}0-9 ]+$/u; 
+    
+        const productNameRegex = /^[\p{L}\p{M}0-9 ]+$/u;
         if (!productNameRegex.test(productName)) {
             setError('Tên sản phẩm không được chứa ký tự đặc biệt.');
             return;
         }
-
-        if (isNaN(price) || price <= 0 || price > 1000000) {
-            setError('Giá phải là một số dương và tối đa là 1 triệu.');
+    
+        if (isNaN(price) || price <= 1000 || price > 1000000) {
+            setError('Giá tối thiểu là 1 nghìn và tối đa là 1 triệu.');
             return;
         }
-
+    
         if (description.length > 500) {
             setError('Mô tả không được quá 500 ký tự.');
             return;
         }
-
+    
+        // Tạo formData để gửi
         const formData = new FormData();
         formData.append('name', productName);
         formData.append('price', Number(price));
@@ -117,17 +127,21 @@ const EditProduct = () => {
             formData.append('image', image);
         }
         formData.append('categoryId', categoryId);
-
+    
+        // Kiểm tra và thêm các nguyên liệu vào formData
         for (let i = 0; i < ingredients.length; i++) {
             const ing = ingredients[i];
-            if (!ing.id || isNaN(ing.quantity) || ing.quantity <= 0) {
-                setError('Một trong các nguyên liệu không hợp lệ (cần có ID và số lượng dương).');
+            if (!ing.id || isNaN(ing.quantity) || ing.quantity <= 0 || !ing.unit) {
+                setError('Một trong các nguyên liệu không hợp lệ (cần có ID, số lượng dương và đơn vị).');
                 return;
             }
+    
+            // Đảm bảo rằng các nguyên liệu được gửi đúng cấu trúc
             formData.append(`ingredients[${i}][inventoryId]`, ing.id);
             formData.append(`ingredients[${i}][quantity]`, Number(ing.quantity));
+            formData.append(`ingredients[${i}][unit]`, ing.unit);
         }
-
+    
         try {
             const response = await axios.put(`http://localhost:8000/v1/products/${id}`, formData, {
                 headers: {
@@ -141,6 +155,7 @@ const EditProduct = () => {
             setError('Lỗi khi sửa sản phẩm. Vui lòng thử lại.');
         }
     };
+    
 
     return (
         <div className="container_div">

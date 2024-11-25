@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const Product = require('../models/Product');
 const Category = require('../models/Category');
 const Inventory = require('../models/Inventory');
+const Order = require('../models/Order');
 
 const router = express.Router();
 
@@ -70,7 +71,7 @@ router.post('/', upload.single('image'), async (req, res) => {
             productId: newProductId,
             name,
             price,
-            description, // Lưu description vào sản phẩm
+            description, 
             categoryId,
             ingredients: parsedIngredients,
             image: req.file?.path || '',
@@ -111,19 +112,20 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const product = await Product.findOne({ productId: req.params.id })
-            .populate('categoryId', 'name')
-            .populate('ingredients.inventoryId', 'name unit');
+            .populate('categoryId', 'name') // Lấy tên danh mục
+            .populate('ingredients.inventoryId', 'name'); // Chỉ lấy tên nguyên liệu từ Inventory
 
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
 
+        // Chuẩn bị dữ liệu trả về
         const response = {
             ...product.toObject(),
             ingredients: product.ingredients.map((ingredient) => ({
-                name: ingredient.inventoryId?.name || 'Không xác định',
-                unit: ingredient.inventoryId?.unit || 'Không xác định',
-                quantity: ingredient.quantity,
+                name: ingredient.inventoryId?.name || 'Không xác định', // Tên nguyên liệu từ Inventory
+                unit: ingredient.unit || 'Không xác định', // Đơn vị từ Product
+                quantity: ingredient.quantity, // Số lượng từ Product
             })),
         };
 
@@ -133,6 +135,7 @@ router.get('/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 
 // Cập nhật sản phẩm
 router.put('/:id', upload.single('image'), async (req, res) => {
@@ -179,11 +182,23 @@ router.put('/:id', upload.single('image'), async (req, res) => {
 // Xóa sản phẩm
 router.delete('/:id', async (req, res) => {
     try {
-        const product = await Product.findOneAndDelete({ productId: req.params.id });
-
+        const product = await Product.findOne({ productId: req.params.id });
+        
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
+
+        // Kiểm tra xem sản phẩm có trong đơn hàng không
+        const isProductInOrder = await Order.findOne({ "items.productId": product._id });
+
+        if (isProductInOrder) {
+            return res.status(400).json({ 
+                message: 'Không thể xóa sản phẩm vì nó đang có trong đơn hàng.' 
+            });
+        }
+
+        // Xóa sản phẩm
+        await product.remove();
 
         if (product.image) {
             const publicId = product.image.split('/').pop().split('.')[0];
@@ -196,5 +211,9 @@ router.delete('/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+
+
+
 
 module.exports = router;

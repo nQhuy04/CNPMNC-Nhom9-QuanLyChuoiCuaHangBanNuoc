@@ -22,7 +22,9 @@ import ReportManagement from "./Components/ReportManagement/ReportManagement";
 import RevenueReport from './Components/RevenueReport/RevenueReport';
 import InventoryReport from './Components/InventoryReport/InventoryReport';
 import BestSellingReport from './Components/BestSellingReport/BestSellingReport';
-
+import CustomerManagement from './Components/CustomerManagement/CustomerManagement';
+import AddCustomer from "./Components/CustomerManagement/AddCustomer";
+import EditCustomer from "./Components/CustomerManagement/EditCustomer"; 
 
 
 
@@ -33,8 +35,13 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          {/* Route Quản lý người dùng */}
+          {/* Route Quản lý tài khoản */}
           <Route path="/usermanagement" element={<UserManagement />} />
+
+          {/* Route Quản lý khách hàng */}
+          <Route path="/customer" element={<CustomerManagement />} />
+          <Route path="/customer/add" element={<AddCustomer />} />
+          <Route path="/customer/edit/:id" element={<EditCustomer />} />
           
           {/* Route Quản lý đăng nhập, đăng ký */}
           <Route path="/login" element={<Login />} />

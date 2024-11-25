@@ -45,6 +45,13 @@ const OrderManagement = () => {
     const handleDelete = async () => {
         if (orderIdToDelete) {
             try {
+                // Kiểm tra trạng thái đơn hàng trước khi xóa
+                const order = orders.find(order => order.orderId === orderIdToDelete);
+                if (order && order.status !== 'Đã hủy') {
+                    showToast('Chỉ được xóa đơn hàng có trạng thái là "Đã hủy".', 'error');
+                    return;
+                }
+
                 const response = await fetch(
                     `http://localhost:8000/v1/order/${orderIdToDelete}`,
                     { method: 'DELETE' }
@@ -144,7 +151,7 @@ const OrderManagement = () => {
                                 <tr key={order._id} className="order-row">
                                     <td>{index + 1}</td>
                                     <td>{order.orderId}</td>
-                                    <td>{order.customerId?.name || 'N/A'}</td>
+                                    <td>{order.customerName || 'Không rõ tên'}</td>
                                     <td>{order.totalAmount.toLocaleString()}</td>
                                     <td>
                                         <select
@@ -154,7 +161,6 @@ const OrderManagement = () => {
                                             }
                                             className={`status-select ${getStatusClass(order.status)}`}
                                         >
-                                            <option value="Chưa xử lý">Chưa xử lý</option>
                                             <option value="Đang xử lý">Đang xử lý</option>
                                             <option value="Đã giao hàng">Đã giao hàng</option>
                                             <option value="Đã hủy">Đã hủy</option>

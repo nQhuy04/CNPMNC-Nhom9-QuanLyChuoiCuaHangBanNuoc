@@ -42,16 +42,22 @@ const AddCategory = () => {
 
     const handleInputChange = (e) => {
         const value = e.target.value;
-
-        // Kiểm tra xem giá trị nhập vào có chứa số hay không
-        if (/[\d]/.test(value)) {
+    
+        // Biểu thức chính quy kiểm tra xem giá trị có chứa ký tự đặc biệt (ngoài dấu cách) không
+        const specialCharRegex = /[<>?./~!@$%^&*()_+|\\=\[\]{};:'",<>]/;
+    
+        // Kiểm tra xem giá trị có chứa số hay ký tự đặc biệt không
+        if (/\d/.test(value)) {
             setError('Tên danh mục không được chứa số.'); // Cập nhật thông báo lỗi
+        } else if (specialCharRegex.test(value)) {
+            setError('Tên danh mục không được chứa ký tự đặc biệt.'); // Cập nhật thông báo lỗi
         } else {
-            setError(''); // Xóa thông báo lỗi nếu không có số
+            setError(''); // Xóa thông báo lỗi nếu không có số và ký tự đặc biệt
             setName(value); // Cập nhật state với giá trị hợp lệ
         }
     };
-
+    
+    
     return (
         <div className="container_div">
             <SidebarNav />

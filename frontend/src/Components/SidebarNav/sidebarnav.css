@@ -38,6 +38,14 @@
   font-size: 1.2rem;
 }
 
+/* Định dạng cho mục đang active */
+.sidebar ul li a.active {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+
+
+/* Media Query cho sidebar ở màn hình nhỏ */
 @media (max-width: 768px) {
   .sidebar {
     width: 60px;

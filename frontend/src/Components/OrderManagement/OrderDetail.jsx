@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import SidebarNav from '../SidebarNav/SidebarNav'; // Import SidebarNav
 import './OrderDetail.css';
 import { useNavigate } from 'react-router-dom';
-import ToastNotification from '../ToastNotification/ToastNotification'; 
+import ToastNotification from '../ToastNotification/ToastNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
@@ -29,21 +29,21 @@ const OrderDetail = () => {
 
   return (
     <div className="container_div">
-      <SidebarNav /> 
+      <SidebarNav />
       <div className="order-detail-container">
-      <FontAwesomeIcon 
-                    icon={faArrowLeft} 
-                    className="back-btn_order-detail" 
-                    onClick={() => navigate(-1)}
-                    title="Quay lại"
-                />
+        <FontAwesomeIcon
+          icon={faArrowLeft}
+          className="back-btn_order-detail"
+          onClick={() => navigate(-1)}
+          title="Quay lại"
+        />
         <h1 className="order-detail-title">Chi Tiết Đơn Hàng: {order.orderId}</h1>
 
         <table className="order-info-table">
           <tbody>
             <tr>
               <th>Khách hàng:</th>
-              <td>{order.customerId?.name || 'Không có thông tin'}</td>
+              <td>{order.customerName || 'Không có thông tin'}</td>
             </tr>
             <tr>
               <th>Ngày đặt hàng:</th>
@@ -53,7 +53,6 @@ const OrderDetail = () => {
               <th>Tổng tiền:</th>
               <td>{order.totalAmount.toLocaleString()} VND</td>
             </tr>
-            {/* Add Payment Method */}
             <tr>
               <th>Phương thức thanh toán:</th>
               <td>{order.paymentMethod || 'Không có thông tin'}</td>
@@ -73,11 +72,11 @@ const OrderDetail = () => {
           </thead>
           <tbody>
             {order.items.map((item) => (
-              <tr key={item.productId._id}>
-                <td>{item.productId.name}</td>
+              <tr key={item.productName}> {/* Dùng productName làm key vì mỗi sản phẩm sẽ có tên riêng */}
+                <td>{item.productName || 'Sản phẩm không tồn tại'}</td>
                 <td>{item.quantity}</td>
-                <td>{item.productId.price.toLocaleString()}</td>
-                <td>{(item.quantity * item.productId.price).toLocaleString()}</td>
+                <td>{item.price.toLocaleString() || '0'}</td>
+                <td>{(item.quantity * item.price).toLocaleString()}</td>
               </tr>
             ))}
           </tbody>

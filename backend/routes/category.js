@@ -1,6 +1,7 @@
 // routes/category.js
 const express = require('express');
 const Category = require('../models/Category');
+const Product = require('../models/Product');
 const router = express.Router();
 
 /* ====== CRUD CATEGORIES ====== */
@@ -61,12 +62,25 @@ router.put('/:id', async (req, res) => {
 // 5. Xóa Category theo ID
 router.delete('/:id', async (req, res) => {
   try {
+    const linkedProducts = await Product.find({ categoryId: req.params.id });
+
+    if (linkedProducts.length > 0) {
+      return res.status(400).json({ 
+        error: 'Không thể xóa danh mục vì vẫn còn sản phẩm thuộc danh mục này!' 
+      });
+    }
+
+    // Xóa danh mục nếu không có sản phẩm liên kết
     const deletedCategory = await Category.findByIdAndDelete(req.params.id);
-    if (!deletedCategory) return res.status(404).json({ error: 'Không tìm thấy category!' });
-    res.status(200).json({ message: 'Xóa thành công!' });
+    if (!deletedCategory) {
+      return res.status(404).json({ error: 'Không tìm thấy danh mục!' });
+    }
+
+    res.status(200).json({ message: 'Xóa danh mục thành công!' });
   } catch (error) {
-    res.status(500).json({ error: 'Lỗi khi xóa category!' });
+    res.status(500).json({ error: 'Lỗi khi xóa danh mục!' });
   }
 });
+
 
 module.exports = router;

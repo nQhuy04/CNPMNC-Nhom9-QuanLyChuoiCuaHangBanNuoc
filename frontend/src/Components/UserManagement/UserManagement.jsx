@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginSuccess } from "../../redux/authSlice";
 import { createAxios } from "../../createInstance";
-import { FaUserCircle, FaTrash } from 'react-icons/fa';
+import { FaTrash } from 'react-icons/fa';
 import SidebarNav from "../SidebarNav/SidebarNav";
 
 const UserManagement = () => {
@@ -45,28 +45,41 @@ const UserManagement = () => {
 
   return (
     <div className="container_div">
-      <SidebarNav/>
-    <main className="user-management-container">
-      <h1 className="user-management-title">Quản Lý Người Dùng</h1>
-      <div className="user-management-role">
-        {`Vai trò của bạn: ${user?.isAdmin ? 'Quản trị viên' : 'Người dùng'}`}
-      </div>
-      {deleteMessage && <div className="delete-message">{deleteMessage}</div>}
-      <div className="user-list">
-        {userList?.map((user) => (
-          <div className="user-card" key={user._id}>
-            <FaUserCircle className="user-icon" />
-            <div className="user-info">
-              <h3 className="user-name">{user.username}</h3>
-              <p className="user-email">{user.email}</p>
-            </div>
-            <button className="delete-user" onClick={() => handleDelete(user._id)}>
-              <FaTrash /> Xóa
-            </button>
-          </div>
-        ))}
-      </div>
-    </main>
+      <SidebarNav />
+      <main className="user-management-container">
+        <h1 className="user-management-title">Quản Lý Người Dùng</h1>
+        <div className="user-management-role">
+          {`Vai trò của bạn: ${user?.isAdmin ? 'Quản trị viên' : 'Người dùng'}`}
+        </div>
+        {deleteMessage && <div className="delete-message">{deleteMessage}</div>}
+        <table className="user-table">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Vai trò</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            {userList?.map((user) => (
+              <tr key={user._id}>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+                <td>{user.isAdmin ? 'Quản trị viên' : 'Người dùng'}</td>
+                <td>
+                  <button
+                    className="delete-user"
+                    onClick={() => handleDelete(user._id)}
+                  >
+                    <FaTrash /> Xóa
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </main>
     </div>
   );
 };

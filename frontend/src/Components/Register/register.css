@@ -8,92 +8,113 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 2rem auto; 
+  margin: 2rem auto;
   padding: 2rem;
-  border-radius: 12px;
-  width: 400px; 
-  background-color: #ffffff; 
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+  border-radius: 15px;
+  width: 400px;
+  background: linear-gradient(145deg, #ffffff, #f3f3f3); /* Soft gradient */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1); /* Multi-layer shadow */
+  animation: fadeIn 0.6s ease-in-out; /* Smooth fade-in effect */
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Title Styles */
 .register-title {
   font-weight: 700;
-  font-size: 2rem; 
-  color: #ff6347; 
-  margin-bottom: 1rem; 
+  font-size: 2rem;
+  color: #ff6347;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
+/* Form and Input Styles */
 form {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-
-
 input {
-  border: 1px solid #ccc; 
-  padding: 0.75rem; 
-  margin-bottom: 1rem; 
-  border-radius: 6px; 
-  transition: border 0.3s; 
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05); /* Inner shadow for depth */
 }
 
 input:focus {
-  border: 1px solid #ff6347; 
-  outline: none; 
+  border-color: #ff6347;
+  outline: none;
+  box-shadow: 0 0 8px rgba(255, 99, 71, 0.3); /* Focus shadow */
 }
 
+/* Button Styles */
 button {
   cursor: pointer;
   border: none;
   padding: 0.75rem;
-  border-radius: 6px; 
-  color: white;
-  background-color: #ff6347; 
+  border-radius: 8px;
+  color: #ffffff;
+  background-color: #ff6347;
   font-size: 1rem;
-  transition: background-color 0.3s; 
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(255, 99, 71, 0.3);
 }
 
 button:hover {
-  background-color: #d9534f; 
+  background-color: #d9534f;
+  transform: translateY(-2px); /* Lift effect */
 }
 
-.register-register {
-  margin-top: 1rem; 
-  font-size: 0.9rem; 
-  color: #555; 
+button:active {
+  transform: translateY(1px); /* Button press effect */
 }
 
-.register-register-link {
-  text-decoration: none;
-  color: #ff6347; 
-  font-weight: 700;
-}
-
-.email_label{
-  font-size: 0.9rem; 
-  margin-bottom: 0.5rem; 
-  color: #555; 
-}
-.username_label{
-  font-size: 0.9rem; 
-  margin-bottom: 0.5rem; 
-  color: #555; 
-}
-.password_label {
-  font-size: 0.9rem; 
-  margin-bottom: 0.5rem; 
-  color: #555; 
-}
-.register-login {
-  margin-top: 1rem; 
-  font-size: 0.9rem; 
+/* Label and Error Message Styles */
+.email_label, .username_label, .password_label, .sdt_label, .diachi_label {
+  font-size: 0.9rem;
   color: #555;
-}
-.register-login-link {
-  text-decoration: none;
-  color: #ff6347; 
-  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
+.register-err {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: 1.2rem;
+  margin-bottom: 1rem;
+  padding-left: 5px;
+  text-align: left;
+}
+
+/* Additional Links and Text */
+.register-login, .register-register {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+  text-align: center;
+}
+
+.register-login-link, .register-register-link {
+  color: #ff6347;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.register-login-link:hover, .register-register-link:hover {
+  text-decoration: underline;
+}

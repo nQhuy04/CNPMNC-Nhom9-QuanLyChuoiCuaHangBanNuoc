@@ -43,19 +43,29 @@ const CategoryManagement = () => {
 
   const confirmDelete = async () => {
     try {
-      await fetch(`http://localhost:8000/v1/categories/${categoryToDelete}`, { method: 'DELETE' });
-      setToastMessage('Danh mục đã được xóa thành công!');
-      setToastType('success'); // Thông báo thành công
-      setShowToast(true);
-      fetchCategories();
+      const response = await fetch(`http://localhost:8000/v1/categories/${categoryToDelete}`, { 
+        method: 'DELETE' 
+      });
+      
+      if (!response.ok) { // Kiểm tra nếu phản hồi không thành công
+        const errorData = await response.json();
+        setToastMessage(errorData.error || 'Có lỗi xảy ra khi xóa danh mục.');
+        setToastType('error'); // Loại thông báo là lỗi
+      } else {
+        setToastMessage('Danh mục đã được xóa thành công!');
+        setToastType('success'); // Loại thông báo thành công
+        fetchCategories(); // Cập nhật lại danh sách danh mục
+      }
     } catch (error) {
-      setToastMessage('Có lỗi xảy ra khi xóa danh mục.');
-      setToastType('error'); // Thông báo lỗi
-      setShowToast(true);
+      console.error(error);
+      setToastMessage('Có lỗi xảy ra khi kết nối với máy chủ.');
+      setToastType('error'); // Loại thông báo lỗi
     } finally {
-      setConfirmDialogVisible(false);
+      setShowToast(true); // Hiển thị thông báo
+      setConfirmDialogVisible(false); // Ẩn hộp thoại xác nhận
     }
   };
+  
 
   const cancelDelete = () => {
     setConfirmDialogVisible(false);

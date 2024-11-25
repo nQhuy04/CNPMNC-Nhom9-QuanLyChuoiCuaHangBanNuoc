@@ -48,12 +48,20 @@ const InventoryManagement = () => {
                     `http://localhost:8000/v1/inventory/${inventoryIdToDelete}`,
                     { method: 'DELETE' }
                 );
-
+    
+                // Kiểm tra nếu server trả về lỗi (ví dụ: không thể xóa vì nguyên liệu đang được sử dụng trong công thức)
                 if (response.ok) {
                     showToast('Xóa thành công!', 'success');
-                    fetchInventories();
+                    fetchInventories(); // Cập nhật lại danh sách sau khi xóa thành công
                 } else {
-                    showToast('Lỗi khi xóa nguyên liệu.', 'error');
+                    const data = await response.json();
+                    if (data.error && data.error.includes('sản phẩm')) {
+                        // Nếu lỗi là do có sản phẩm sử dụng nguyên liệu
+                        showToast('Không thể xóa nguyên liệu vì có sản phẩm đang sử dụng nó.', 'error');
+                    } else {
+                        // Các lỗi khác
+                        showToast('Lỗi khi xóa nguyên liệu.', 'error');
+                    }
                 }
             } catch (error) {
                 console.error('Error deleting inventory:', error);
@@ -64,6 +72,7 @@ const InventoryManagement = () => {
             }
         }
     };
+    
 
     const filteredInventories = inventories.filter((inventory) =>
         inventory.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -110,7 +119,7 @@ const InventoryManagement = () => {
                                     <td>{inventory.inventoryId}</td>
                                     <td>{inventory.name}</td>
                                     <td>{inventory.unit}</td>
-                                    <td>{inventory.stockQuantity}</td>
+                                    <td>{inventory.stockQuantity.toFixed(2)}</td>
                                     <td>
                                         {calculateTotalPrice(inventory.imports).toLocaleString()}
                                     </td>

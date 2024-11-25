@@ -1,4 +1,3 @@
-
 import { Link, useNavigate } from "react-router-dom";
 import "./navbar.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,6 +8,7 @@ import { FaCoffee } from 'react-icons/fa';
 
 const NavBar = () => {
   const user = useSelector((state) => state.auth.login.currentUser);
+  console.log(user); // Kiểm tra xem user có giá trị đúng không
   const accessToken = user?.accessToken;
   const id = user?._id;
   const dispatch = useDispatch();
@@ -17,6 +17,7 @@ const NavBar = () => {
 
   const handleLogout = () => {
     logOut(dispatch, id, navigate, accessToken, axiosJWT);
+    navigate("/login");  // Chuyển hướng đến trang đăng nhập sau khi đăng xuất
   };
 
   return (
@@ -27,12 +28,12 @@ const NavBar = () => {
           <span>Coffee Shop</span>
         </Link>
         {user && (
-          <p className="navbar-user">Hi, <span>{user.username}</span></p>
+          <p className="navbar-user">Hi, <span>{user.username}</span></p> // Hiển thị tên người dùng
         )}
       </div>
       <div className="navbar-right">
         {user ? (
-          <Link to="/logout" className="navbar-logout" onClick={handleLogout}>Log out</Link>
+          <button className="navbar-logout" onClick={handleLogout}>Đăng xuất</button>
         ) : (
           <>
             <Link to="/login" className="navbar-login">Đăng nhập</Link>

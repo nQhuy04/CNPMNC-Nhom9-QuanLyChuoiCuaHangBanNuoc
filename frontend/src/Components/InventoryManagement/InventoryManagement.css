@@ -141,34 +141,55 @@
     transform: scale(1.05);
 }
 
-/* Phân trang */
+/* Container cho phần phân trang */
 .pagination {
     display: flex;
     justify-content: center;
     margin-top: 20px;
+    padding: 10px;
 }
 
+/* Nút phân trang */
 .pagination-button {
-    padding: 12px 18px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    padding: 10px 15px;
     margin: 0 5px;
-    background-color: white;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-.pagination-button:hover {
+    border: 1px solid #ddd;
     background-color: #f1f1f1;
-    transform: scale(1.05);
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.pagination-button.active {
-    background-color: rgb(76, 161, 175);
+/* Nút phân trang khi hover */
+.pagination-button:hover {
+    background-color: #4CAF50;
     color: white;
-    border-color: rgb(76, 161, 175);
 }
+
+/* Nút phân trang đang được chọn */
+.pagination-button.active {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+/* Nút phân trang disabled */
+.pagination-button:disabled {
+    background-color: #f1f1f1;
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Responsive: Nút phân trang nhỏ lại trên các màn hình nhỏ */
+@media (max-width: 768px) {
+    .pagination-button {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}
+
 
 /* Responsive cho mobile */
 @media (max-width: 768px) {

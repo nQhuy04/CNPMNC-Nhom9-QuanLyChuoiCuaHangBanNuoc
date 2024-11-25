@@ -2,8 +2,8 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import SidebarNav from '../SidebarNav/SidebarNav';
 import './AddProduct.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
 const AddProduct = () => {
@@ -12,13 +12,13 @@ const AddProduct = () => {
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
-  const [ingredients, setIngredients] = useState([{ id: '', quantity: '' }]);
+  const [ingredients, setIngredients] = useState([{ id: '', quantity: '', unit: '' }]);
   const [availableIngredients, setAvailableIngredients] = useState([]);
   const [categories, setCategories] = useState([]);
   const [categoryId, setCategoryId] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  
+
   const fetchIngredients = async () => {
     try {
       const response = await axios.get('http://localhost:8000/v1/inventory');
@@ -44,7 +44,25 @@ const AddProduct = () => {
 
   const handleIngredientChange = (index, value) => {
     const newIngredients = [...ingredients];
-    newIngredients[index].id = value; 
+    newIngredients[index].id = value;
+
+    // Lấy thông tin nguyên liệu từ kho
+    const selectedIngredient = availableIngredients.find(ing => ing._id === value);
+
+    if (selectedIngredient) {
+      // Kiểm tra đơn vị trong kho và chuyển đổi cho đúng với sản phẩm
+      if (selectedIngredient.unit === 'kg') {
+        newIngredients[index].unit = 'g';  // Đặt đơn vị thành g
+        newIngredients[index].quantity *= selectedIngredient.conversionFactor;  // Chuyển đổi kg thành g
+      } else if (selectedIngredient.unit === 'lít') {
+        newIngredients[index].unit = 'ml';  // Đặt đơn vị thành ml
+        newIngredients[index].quantity *= selectedIngredient.conversionFactor;  // Chuyển đổi lít thành ml
+      } else {
+        // Nếu nguyên liệu có đơn vị khác, giữ nguyên
+        newIngredients[index].unit = selectedIngredient.unit;
+      }
+    }
+
     setIngredients(newIngredients);
   };
 
@@ -63,17 +81,24 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Ràng buộc tên sản phẩm không có ký tự đặc biệt
-    const productNameRegex = /^[a-zA-Z0-9 ]+$/; // Chỉ cho phép chữ cái, số và khoảng trắng
+    console.log("Product Data:", {
+      productName,
+      price,
+      description,
+      categoryId,
+      ingredients,
+      image,
+    });
+
+    const productNameRegex = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơĂẰẮẲẴẶẵẹẻẽềếểễệìíỉịòóỏõôốồổỗộơớờởỡợùúủũụưứừửữựỲÝỶỸỳýỷỹ\s0-9]+$/u;
     if (!productNameRegex.test(productName)) {
-      setError('Tên sản phẩm không được chứa ký tự đặc biệt.');
+      setError('Tên sản phẩm không được chứa ký tự đặc biệt không hợp lệ.');
       return;
     }
 
     // Ràng buộc giá
-    if (isNaN(price) || price <= 0 || price > 1000000) {
-      setError('Giá phải là một số dương và tối đa là 1 triệu.');
+    if (isNaN(price) || price <= 1000 || price > 1000000) {
+      setError('Giá tối thiểu là 1 nghìn và tối đa là 1 triệu.');
       return;
     }
 
@@ -92,7 +117,7 @@ const AddProduct = () => {
       formData.append('image', image);
     }
     formData.append('categoryId', categoryId);
-    
+
     // Ràng buộc nguyên liệu
     for (let i = 0; i < ingredients.length; i++) {
       const ing = ingredients[i];
@@ -100,10 +125,11 @@ const AddProduct = () => {
         setError('Một trong các nguyên liệu không hợp lệ (cần có ID và số lượng dương).');
         return;
       }
-      formData.append(`ingredients[${i}][inventoryId]`, ing.id); // Sử dụng 'i' thay vì 'index'
+      formData.append(`ingredients[${i}][inventoryId]`, ing.id);
       formData.append(`ingredients[${i}][quantity]`, Number(ing.quantity));
+      formData.append(`ingredients[${i}][unit]`, ing.unit);
     }
-    
+
     try {
       const response = await axios.post('http://localhost:8000/v1/products', formData, {
         headers: {
@@ -115,9 +141,11 @@ const AddProduct = () => {
       setPrice('');
       setDescription('');
       setImage(null);
-      setIngredients([{ id: '', quantity: '' }]);
+      setIngredients([{ id: '', quantity: '', unit: '' }]);
       setCategoryId('');
       setError('');
+
+      navigate('/product');
     } catch (error) {
       console.error("Error adding product:", error);
       setError('Lỗi khi thêm sản phẩm. Vui lòng thử lại.');
@@ -125,14 +153,13 @@ const AddProduct = () => {
     }
   };
 
-
   return (
     <div className="container_div">
       <SidebarNav />
       <div className="add-product-container">
-        <FontAwesomeIcon 
-          icon={faArrowLeft} 
-          className="back_btn_AddProduct" 
+        <FontAwesomeIcon
+          icon={faArrowLeft}
+          className="back_btn_AddProduct"
           onClick={() => navigate(-1)}
           title="Quay lại"
         />
@@ -166,7 +193,7 @@ const AddProduct = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
-              maxLength="1000" // Giới hạn 500 ký tự
+              maxLength="1000" // Giới hạn 1000 ký tự
               className="textarea-field"
             ></textarea>
           </div>
@@ -224,7 +251,7 @@ const AddProduct = () => {
                 required
                 className="ingredient-quantity"
               />
-              <span>{availableIngredients.find(ing => ing._id === ingredient.id)?.unit}</span> 
+              <span>{ingredient.unit}</span>
               <button type="button" onClick={() => removeIngredient(index)} className="remove-ingredient-button">
                 Xóa
               </button>

@@ -1,21 +1,3 @@
-/* Tổng quan container */
-.container_div {
-    display: flex;
-    height: 100vh;
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f6f8;
-}
-
-/* Sidebar */
-.sidebar-nav {
-    width: 250px;
-    background-color: #343a40;
-    color: white;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
 
 /* Nội dung chính */
 .order-content {
@@ -171,51 +153,6 @@
     background-color: #28a745;
 }
 
-/* Modal confirm */
-.confirm-dialog {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    z-index: 100;
-}
-
-.confirm-dialog .confirm-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-}
-
-.confirm-dialog .confirm-button,
-.confirm-dialog .cancel-button {
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.confirm-button {
-    background-color: #28a745;
-    color: white;
-}
-
-.cancel-button {
-    background-color: #f1f1f1;
-    color: #333;
-}
-
-.confirm-button:hover {
-    background-color: #218838;
-}
-
-.cancel-button:hover {
-    background-color: #e0e0e0;
-}
 
 /* Styling for the status dropdown */
 .status-select {

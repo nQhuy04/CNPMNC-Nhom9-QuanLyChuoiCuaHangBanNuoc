@@ -8,19 +8,19 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 5rem auto;
   padding: 2rem;
+  margin: 30px auto;
   border-radius: 12px;
-  width: 400px; /* Chiều rộng của container */
-  background-color: #ffffff; /* Màu nền trắng */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ cho container */
+  width: 400px;
+  background-color: #ffffff;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
 }
 
 .login-title {
   font-weight: 700;
-  font-size: 2rem; /* Kích thước tiêu đề */
-  color: #ff6347; /* Màu đỏ gạch cho tiêu đề */
-  margin-bottom: 1rem; /* Khoảng cách dưới tiêu đề */
+  font-size: 2rem;
+  color: #ff6347;
+  margin-bottom: 1.5rem;
 }
 
 form {
@@ -29,58 +29,76 @@ form {
   width: 100%;
 }
 
-.login_name_label {
-  font-size: 0.9rem; /* Kích thước chữ label */
-  margin-bottom: 0.5rem; /* Khoảng cách dưới label */
-  color: #555; /* Màu chữ cho label */
-  position: relative;
-}
-
+.login_name_label,
 .login_pass_label {
-  font-size: 0.9rem; /* Kích thước chữ label */
-  margin-bottom: 0.5rem; /* Khoảng cách dưới label */
-  color: #555; /* Màu chữ cho label */
-  position: relative;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+  color: #333;
+  font-weight: 600;
+  padding-left: 5px;
 }
-
-
 
 input {
-  border: 1px solid #ccc; /* Đường viền cho input */
-  padding: 0.75rem; /* Padding cho input */
-  margin-bottom: 1rem; /* Khoảng cách giữa các input */
-  border-radius: 6px; /* Radius cho input */
-  transition: border 0.3s; /* Hiệu ứng chuyển tiếp khi focus */
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #333;
+  transition: border-color 0.3s;
+}
+
+input::placeholder {
+  color: #bbb;
 }
 
 input:focus {
-  border: 1px solid #ff6347; /* Đổi màu đường viền khi focus */
-  outline: none; /* Xóa outline */
+  border-color: #ff6347;
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 99, 71, 0.4);
 }
 
 button {
   cursor: pointer;
   border: none;
-  padding: 0.75rem;
-  border-radius: 6px; /* Radius cho button */
-  color: white;
-  background-color: #ff6347; /* Màu nền cho button */
-  font-size: 1rem;
-  transition: background-color 0.3s; /* Hiệu ứng chuyển tiếp cho button */
+  padding: 0.8rem;
+  border-radius: 8px;
+  color: #ffffff;
+  background-color: #ff6347;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: background-color 0.3s;
+  margin-top: 1rem;
+  box-shadow: 0 4px 10px rgba(255, 99, 71, 0.3);
 }
 
 button:hover {
-  background-color: #d9534f; /* Tối màu khi hover */
+  background-color: #d9534f;
 }
 
-.login-register {
-  margin-top: 1rem; /* Khoảng cách phía trên cho đoạn chữ đăng ký */
-  font-size: 0.9rem; /* Kích thước chữ cho đoạn chữ đăng ký */
-  color: #555; /* Màu chữ cho đoạn chữ đăng ký */
+.login-err {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+input {
+  margin-bottom: 0.5rem;
+}
+
+.login-register{
+  font-size: 0.7rem;
 }
 
 .login-register-link {
   text-decoration: none;
-  color: #ff6347; /* Màu cho liên kết đăng ký */
+  color: #ff6347;
   font-weight: 700;
+  transition: color 0.3s;
+}
+
+.login-register-link:hover {
+  color: #d9534f;
 }
