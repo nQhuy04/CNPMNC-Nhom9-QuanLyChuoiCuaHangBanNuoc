@@ -18,6 +18,7 @@ import EditInventory from "./Components/InventoryManagement/EditInventory";
 import DetailInventory from "./Components/InventoryManagement/DetailInventory";
 import OrderManagement from "./Components/OrderManagement/OrderManagement";
 import OrderDetail from "./Components/OrderManagement/OrderDetail";
+import Home from "./Components/Home/home";
 import ReportManagement from "./Components/ReportManagement/ReportManagement";
 import RevenueReport from './Components/RevenueReport/RevenueReport';
 import InventoryReport from './Components/InventoryReport/InventoryReport';
@@ -34,8 +35,12 @@ function App() {
       <NavBar />
       <div className="App">
         <Routes>
+
           <Route path="/" element={<Dashboard />} />
-          {/* Route Quản lý tài khoản */}
+          <Route path="/home" element={<Home />} />
+          
+          
+          {/* Route Quản lý tài khoản */}         
           <Route path="/usermanagement" element={<UserManagement />} />
 
           {/* Route Quản lý khách hàng */}

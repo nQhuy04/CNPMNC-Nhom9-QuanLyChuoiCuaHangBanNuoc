@@ -98,6 +98,9 @@ input {
   font-weight: 700;
   transition: color 0.3s;
 }
+.login-register-link:hover {
+  color: #d9534f;
+}
 
 .login-register-link:hover {
   color: #d9534f;
